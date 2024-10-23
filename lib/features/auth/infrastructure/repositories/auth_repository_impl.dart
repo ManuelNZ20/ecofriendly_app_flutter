@@ -17,8 +17,13 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<UserApp> checkAuthStatus(String? token) async {
-    return await authDataSource.checkAuthStatus(token);
+  Future<UserApp> checkAuthStatusUser(String? token) async {
+    return await authDataSource.checkAuthStatusUser(token);
+  }
+
+  @override
+  Future<CompanyApp> checkAuthStatusCompany(String? token) async {
+    return await authDataSource.checkAuthStatusCompany(token);
   }
 
   @override
@@ -37,7 +42,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<UserApp> login(String email, String password) async {
+  Future<UserLogin> login(String email, String password) async {
     return await authDataSource.login(email, password);
   }
 
@@ -71,5 +76,15 @@ class AuthRepositoryImpl implements AuthRepository {
       String otp4, String otp5, String otp6, String email) async {
     return await authDataSource.checkCompanyOtp(
         otp1, otp2, otp3, otp4, otp5, otp6, email);
+  }
+
+  @override
+  Future<UserApp> getDataUser(String id) async {
+    return await authDataSource.getDataUser(id);
+  }
+
+  @override
+  Future<CompanyApp> getDataCompany(String id) async {
+    return await authDataSource.getDataCompany(id);
   }
 }

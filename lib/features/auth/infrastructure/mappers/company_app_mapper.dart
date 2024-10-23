@@ -2,7 +2,7 @@ import '../../domain/domain.dart';
 import '../models/company_app.module.dart';
 
 class CompanyAppMapper {
-  static CompanyApp companyJsonTiEntity(CompanyModel company) => CompanyApp(
+  static CompanyApp companyJsonToEntity(CompanyModel company) => CompanyApp(
         idCompany: company.idCompany,
         imgPresentation: company.imgPresentation,
         bannerCompany: company.bannerCompany,

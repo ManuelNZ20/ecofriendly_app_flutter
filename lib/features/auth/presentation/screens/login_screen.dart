@@ -58,6 +58,9 @@ class LoginForm extends ConsumerWidget {
       if (next.errorMessage.isNotEmpty) {
         showSnackbar(context, next.errorMessage);
       }
+      if (next.messageRegister.isNotEmpty) {
+        showSnackbar(context, next.messageRegister);
+      }
     });
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -117,9 +120,7 @@ class LoginForm extends ConsumerWidget {
             height: 60,
             child: CustomFilledButton(
               text: 'INICIAR SESIÓN',
-              onPressed: () {
-                ref.read(loginFormProvider.notifier).onFormSubmit();
-              },
+              onPressed: ref.read(loginFormProvider.notifier).onFormSubmit,
             ),
           ),
           // const SizedBox(height: 20),

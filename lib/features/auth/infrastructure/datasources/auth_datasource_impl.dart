@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'package:bcrypt/bcrypt.dart';
+import 'package:ecofriendly_app/features/auth/infrastructure/mappers/user_login_mapper.dart';
+import 'package:ecofriendly_app/features/auth/infrastructure/models/user_login.module.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 import '../../../emails/domain/domain.dart';
@@ -15,8 +16,45 @@ class AuthDatasourceImpl implements AuthDatasource {
   }
 
   @override
-  Future<UserApp> checkAuthStatus(String? token) {
-    throw UnimplementedError();
+  Future<UserApp> checkAuthStatusUser(String? token) async {
+    try {
+      final user =
+          await supabase.from('user_app').select().eq('token_auth', token!);
+      final userModel = UserModel.fromJson(user.first);
+      final userApp = UserAppMapper.userJsonToEntity(userModel);
+      return userApp;
+    } on AuthException catch (e) {
+      if (e.statusCode == '400') {
+        throw CustomError(e.message, e.code!);
+      }
+      if (e.statusCode == '401') {
+        throw CustomError('Token Incorrecto', e.code!);
+      }
+      throw Exception();
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  @override
+  Future<CompanyApp> checkAuthStatusCompany(String? token) async {
+    try {
+      final company =
+          await supabase.from('company_app').select().eq('token_auth', token!);
+      final companyModel = CompanyModel.fromJson(company.first);
+      final companyApp = CompanyAppMapper.companyJsonToEntity(companyModel);
+      return companyApp;
+    } on AuthException catch (e) {
+      if (e.statusCode == '400') {
+        throw CustomError(e.message, e.code!);
+      }
+      if (e.statusCode == '401') {
+        throw CustomError('Token Incorrecto', e.code!);
+      }
+      throw Exception();
+    } catch (e) {
+      throw Exception();
+    }
   }
 
   @override
@@ -35,29 +73,33 @@ class AuthDatasourceImpl implements AuthDatasource {
   }
 
   @override
-  Future<UserApp> login(String email, String password) async {
+  Future<UserLogin> login(String email, String password) async {
     try {
-      final res = await supabase.auth.signInWithPassword(
-        email: email,
-        password: password,
-      );
-      final userMetadata = res.session?.user.userMetadata;
-      if (userMetadata == null) {
-        throw Exception('User Metadata is null');
+      final resUser = await _userLogin(email, password, 'user_app');
+      if (resUser != null) {
+        final userLoginModel = UserLoginModel.fromJson(resUser);
+        final userLoginApp =
+            UserLoginMapper.fromEntityUserLogin(userLoginModel);
+        return userLoginApp;
       }
-      final userModel = UserModel.fromJson(userMetadata);
-      final user = UserAppMapper.userJsonToEntity(userModel);
-      return user;
+      final resCompany = await _userLogin(email, password, 'company_app');
+      if (resCompany != null) {
+        final userLoginModel = UserLoginModel.fromJson(resCompany);
+        final userLoginApp =
+            UserLoginMapper.fromEntityUserLogin(userLoginModel);
+        return userLoginApp;
+      }
+      throw CustomError('Esta cuenta no existe', '500');
     } on AuthException catch (e) {
       if (e.statusCode == '400') {
         throw CustomError(e.message, e.code!);
       }
       if (e.statusCode == '401') {
-        throw CustomError('Credenciales Incorrectas', e.code!);
+        throw CustomError('Credenciales Incorrectas A', e.code!);
       }
       throw CustomError('Something wrong happend', e.code ?? '');
-    } catch (e) {
-      throw Exception();
+    } on Exception catch (e) {
+      throw CustomError('Credenciales Incorrectas $e', '500');
     }
   }
 
@@ -105,7 +147,7 @@ class AuthDatasourceImpl implements AuthDatasource {
         throw CustomError('No se puede registrar esta cuenta', '500');
       }
       final companyModel = CompanyModel.fromJson(data);
-      final companyApp = CompanyAppMapper.companyJsonTiEntity(companyModel);
+      final companyApp = CompanyAppMapper.companyJsonToEntity(companyModel);
       return companyApp;
     } on CustomError catch (e) {
       throw CustomError('No se puede registrar, ${e.message}', '500');
@@ -149,7 +191,7 @@ class AuthDatasourceImpl implements AuthDatasource {
         'state_account': true,
       }).eq('email', email);
       final companyModel = CompanyModel.fromJson(res.first);
-      final companyApp = CompanyAppMapper.companyJsonTiEntity(companyModel);
+      final companyApp = CompanyAppMapper.companyJsonToEntity(companyModel);
       return companyApp;
     } on CustomError catch (e) {
       throw CustomError('No se puede registrar, ${e.message}', '500');
@@ -178,11 +220,11 @@ class AuthDatasourceImpl implements AuthDatasource {
         email: email,
         token: token,
       );
-      final hashPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+      // final hashPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
       final resp = await supabase.from('user_app').insert({
         'email': email,
-        'password': hashPassword,
+        'password': password,
         'name': name,
         'last_name': lastName,
         'token_state_account': token,
@@ -217,15 +259,14 @@ class AuthDatasourceImpl implements AuthDatasource {
         email: email,
         token: token,
       );
-      final hashPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-      print('$name, $email,$phone');
+      // final hashPassword = BCrypt.hashpw(password, BCrypt.gensalt());
       final resp = await supabase.from('company_app').insert({
         'email': email,
-        'password': hashPassword,
+        'password': password,
         'name_company': name,
         'phone': phone,
         'token_state_account': token,
-        'id_type_user': 1,
+        'id_type_user': 3,
       }).select();
       return resp.first;
     } on CustomError catch (e) {
@@ -254,5 +295,60 @@ class AuthDatasourceImpl implements AuthDatasource {
         .eq('email', email)
         .eq('state_account', stateAccount);
     return detectedEmail.isNotEmpty;
+  }
+
+  Future<Map<String, dynamic>?> _userLogin(
+      String email, String password, String table) async {
+    try {
+      final response = await supabase.from(table).select('''
+                id,
+                email,
+                password,
+                token_auth,
+                id_type_user
+          ''').eq('email', email).eq('password', password).limit(1).single();
+
+      if (response.isEmpty) {
+        throw CustomError('No se encontró ninguna cuenta en $table', '404');
+      }
+
+      return response;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  @override
+  Future<UserApp> getDataUser(String id) async {
+    try {
+      final data = await supabase
+          .from('user_app')
+          .select()
+          .eq('id', id)
+          .limit(1)
+          .single();
+      final userModel = UserModel.fromJson(data);
+      final userApp = UserAppMapper.userJsonToEntity(userModel);
+      return userApp;
+    } on TimeoutException {
+      throw CustomError('Solicitud de datos timeout', '500');
+    }
+  }
+
+  @override
+  Future<CompanyApp> getDataCompany(String id) async {
+    try {
+      final data = await supabase
+          .from('company_app')
+          .select()
+          .eq('id', id)
+          .limit(1)
+          .single();
+      final companyModel = CompanyModel.fromJson(data);
+      final companyApp = CompanyAppMapper.companyJsonToEntity(companyModel);
+      return companyApp;
+    } on TimeoutException {
+      throw CustomError('Solicitud de datos timeout', '500');
+    }
   }
 }

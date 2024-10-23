@@ -103,7 +103,7 @@ class CompanyForm extends ConsumerWidget {
           const SizedBox(height: 20),
           CustomTextField(
             label: 'número de contacto',
-            keyboardType: TextInputType.name,
+            keyboardType: TextInputType.phone,
             onChanged:
                 ref.read(registerFormCompanyProvider.notifier).onPhoneChange,
           ),

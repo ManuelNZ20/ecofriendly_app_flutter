@@ -2,11 +2,21 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../features/auth/presentation/screens/screens.dart';
+import 'package:ecofriendly_app/features/cart/presentation/screens/home/home_screen_company.dart';
+import 'package:ecofriendly_app/features/client/presentation/screens/home/home_screen_client.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
-    initialLocation: '/login',
+    initialLocation: '/splash',
     routes: [
+      // Splash
+      GoRoute(
+        path: '/splash',
+        builder: (context, state) {
+          return const CheckAuthStatusScreen();
+        },
+      ),
+      // Auth Routes
       GoRoute(
         path: '/login',
         builder: (context, state) {
@@ -49,6 +59,23 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           );
         },
       ),
+      // HOME
+      GoRoute(
+        path: '/home_client',
+        builder: (context, state) {
+          return const HomeScreenClient();
+        },
+      ),
+      GoRoute(
+        path: '/home_company',
+        builder: (context, state) {
+          return const HomeScreenCompany();
+        },
+      ),
     ],
+    redirect: (context, state) {
+      print(state);
+      return null;
+    },
   );
 });

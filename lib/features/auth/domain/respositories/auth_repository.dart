@@ -4,15 +4,17 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract class AuthRepository {
   // verifyOtp()
-  Future<UserApp> login(String email, String password);
+  Future<UserLogin> login(String email, String password);
   // signUser()
   Future<UserApp> signUp(
       String email, String password, String name, String lastName);
   // signCompany()
   Future<CompanyApp> signUpCompany(
       String email, String password, String nameCompany, String phone);
-  // authStatus
-  Future<UserApp> checkAuthStatus(String? token);
+  // authStatus User
+  Future<UserApp> checkAuthStatusUser(String? token);
+  // authStatus Company
+  Future<CompanyApp> checkAuthStatusCompany(String? token);
   // authStatus
   Future<UserApp> checkAuthStateAccount(String? otp);
   // Otp User
@@ -29,4 +31,6 @@ abstract class AuthRepository {
   Future<void> signOut();
 
   Future<Session?> getSessionSupabase();
+  Future<UserApp> getDataUser(String id);
+  Future<CompanyApp> getDataCompany(String id);
 }

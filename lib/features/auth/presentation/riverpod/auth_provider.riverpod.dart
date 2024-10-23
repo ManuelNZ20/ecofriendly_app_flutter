@@ -3,19 +3,26 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ecofriendly_app/features/auth/domain/domain.dart';
 
 import '../../infrastructure/errors/auth_errors.dart';
+import '../../../../core/shared/infrastructure/infrastructure.dart';
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   final authRepository = AuthRepositoryImpl();
+  final keyValueStorageService = KeyValueStorageImpl();
   return AuthNotifier(
     authRepository: authRepository,
+    keyValueStorageService: keyValueStorageService,
   );
 });
 
 class AuthNotifier extends StateNotifier<AuthState> {
   final AuthRepository authRepository;
+  final KeyValueStorageService keyValueStorageService;
   AuthNotifier({
     required this.authRepository,
-  }) : super(AuthState());
+    required this.keyValueStorageService,
+  }) : super(AuthState()) {
+    checkAuthStatus();
+  }
 
   Future<void> loginUser(
     String email,
@@ -23,15 +30,23 @@ class AuthNotifier extends StateNotifier<AuthState> {
   ) async {
     await Future.delayed(const Duration(milliseconds: 500));
     try {
-      final user = await authRepository.login(email, password);
-      _setLoggedUser(user);
+      final userLogin = await authRepository.login(email, password);
+      if (userLogin.idTypeUser == 1) {
+        final user = await authRepository.getDataUser(userLogin.id);
+        _setLoggedUser(user);
+      }
+      if (userLogin.idTypeUser == 3) {
+        final company = await authRepository.getDataCompany(userLogin.id);
+        _setLoggedCompany(company);
+      }
+      // state = state.copyWith(messageRegister: 'Usuario registrado exitosamente'); Inicia sesion
     } on WrongCredentials {
       logout(errorMessage: 'Credenciales no son correctas');
     } on ConnectionTimeout {
       logout(errorMessage: 'No cuenta con conexión a internet');
     } on CustomError catch (e) {
       logout(errorMessage: e.message);
-    } catch (e) {
+    } on Exception catch (e) {
       logout(errorMessage: 'Error no controlado, $e');
     }
   }
@@ -51,7 +66,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         lastName,
       );
       _setLoggedUser(user);
-      state = state.copyWith(messageRegister: 'Datos Comfirmados');
+      state = state.copyWith(messageRegister: 'Datos Confirmados');
     } on CustomError catch (e) {
       logout(errorMessage: e.message);
     } on Exception catch (e) {
@@ -107,17 +122,31 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   void checkAuthStatus() async {
-    final session = await authRepository.getSessionSupabase();
-    if (session == null) return logout();
+    final token = await keyValueStorageService.getValue<String>('token');
+    final typeUser = await keyValueStorageService.getValue<int>('type_user');
+    if (token == null || typeUser == null) return logout();
     try {
-      final user = await authRepository.checkAuthStatus(session.refreshToken);
-      _setLoggedUser(user);
+      switch (typeUser) {
+        case 1:
+          final user = await authRepository.checkAuthStatusUser(token);
+          _setLoggedUser(user);
+          break;
+        case 2:
+          break; // si implementar
+        case 3:
+          final company = await authRepository.checkAuthStatusCompany(token);
+          _setLoggedCompany(company);
+          break;
+      }
     } catch (e) {
-      logout(errorMessage: 'CheckAuthStatus');
+      logout();
     }
   }
 
   void _setLoggedUser(UserApp user) async {
+    await keyValueStorageService.setKeyValue<String>('token', user.tokenAuth!);
+    await keyValueStorageService.setKeyValue<int>(
+        'type_user', user.idTypeUser!);
     state = state.copyWith(
       user: user,
       company: null,
@@ -128,6 +157,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   void _setLoggedCompany(CompanyApp company) async {
+    await keyValueStorageService.setKeyValue('token', company.tokenAuth);
+    await keyValueStorageService.setKeyValue('type_user', company.idTypeUser);
     state = state.copyWith(
       company: company,
       user: null,
@@ -138,6 +169,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> logout({String? errorMessage}) async {
+    await keyValueStorageService.removeKey('token');
+    await keyValueStorageService.removeKey('type_user');
     state = state.copyWith(
       authStatus: AuthStatus.noAuthenticated,
       user: null,
