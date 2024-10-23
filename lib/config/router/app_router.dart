@@ -31,6 +31,24 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           return const RegisterCompanyScreen();
         },
       ),
+      GoRoute(
+        path: '/verify_otp_user/:email',
+        builder: (context, state) {
+          final email = state.pathParameters['email']!;
+          return VerifyUserOtpScreen(
+            email: email,
+          );
+        },
+      ),
+      GoRoute(
+        path: '/verify_otp_company/:email',
+        builder: (context, state) {
+          final email = state.pathParameters['email']!;
+          return VerifyCompanyOtpScreen(
+            email: email,
+          );
+        },
+      ),
     ],
   );
 });

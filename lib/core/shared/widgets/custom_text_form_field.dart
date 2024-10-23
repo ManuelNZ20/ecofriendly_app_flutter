@@ -29,6 +29,12 @@ class CustomTextField extends StatelessWidget {
       borderSide: const BorderSide(),
       borderRadius: BorderRadius.circular(10),
     );
+    final styleTextFormField = Theme.of(context).textTheme.bodyLarge!.copyWith(
+          fontSize: 20,
+        );
+    final styleLabelFormField = Theme.of(context).textTheme.bodyLarge!.copyWith(
+          fontSize: 16,
+        );
 
     return Container(
       decoration: BoxDecoration(
@@ -39,9 +45,7 @@ class CustomTextField extends StatelessWidget {
         validator: validator,
         obscureText: obscureText,
         keyboardType: keyboardType,
-        style: const TextStyle(
-          fontSize: 20, /* color: Colors.black54 */
-        ),
+        style: styleTextFormField,
         decoration: InputDecoration(
           border: UnderlineInputBorder(borderRadius: BorderRadius.circular(20)),
           enabledBorder: border,
@@ -50,6 +54,7 @@ class CustomTextField extends StatelessWidget {
           focusedErrorBorder: border.copyWith(borderSide: const BorderSide()),
           isDense: true,
           label: label != null ? Text(label!) : null,
+          labelStyle: styleLabelFormField,
           hintText: hint,
           errorText: errorMessage,
           enabled: enable ?? true,

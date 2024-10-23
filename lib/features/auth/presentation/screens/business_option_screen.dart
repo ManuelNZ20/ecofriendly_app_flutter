@@ -22,6 +22,10 @@ class _BusinessOptionScreenState extends State<BusinessOptionScreen> {
           fontWeight: FontWeight.bold,
           fontSize: 24,
         );
+    final titlePrevious = Theme.of(context).textTheme.bodyLarge!.copyWith(
+          fontWeight: FontWeight.w300,
+          color: Theme.of(context).colorScheme.primary,
+        );
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -32,18 +36,25 @@ class _BusinessOptionScreenState extends State<BusinessOptionScreen> {
               const Icon(
                 Icons.eco_outlined,
                 color: MyColors.mainColor,
-                size: 50,
+                size: 70,
               ),
+              const SizedBox(height: 20),
               Text(
                 'Elige un Perfil Digital',
                 style: title,
               ),
+              const SizedBox(height: 20),
               RadioListTile(
                 title: const Text('Usuario'),
                 subtitle: const Text('Compras y feedback'),
                 value: BusinessOption.users,
                 groupValue: selectedBusiness,
-                secondary: const Icon(Icons.person),
+                secondary: Icon(
+                  Icons.person,
+                  color: selectedBusiness == BusinessOption.users
+                      ? MyColors.mainColor
+                      : null,
+                ),
                 onChanged: (value) => setState(
                   () {
                     selectedBusiness = BusinessOption.users;
@@ -53,7 +64,12 @@ class _BusinessOptionScreenState extends State<BusinessOptionScreen> {
               RadioListTile(
                 value: BusinessOption.ecofrinedly,
                 title: const Text('Ecofriendly'),
-                secondary: const Icon(Icons.business_outlined),
+                secondary: Icon(
+                  Icons.business_outlined,
+                  color: selectedBusiness == BusinessOption.ecofrinedly
+                      ? MyColors.mainColor
+                      : null,
+                ),
                 subtitle:
                     const Text('Crea tu propia empresa ecologíco digital'),
                 groupValue: selectedBusiness,
@@ -71,16 +87,20 @@ class _BusinessOptionScreenState extends State<BusinessOptionScreen> {
                   text: 'Continuar',
                   onPressed: () {
                     if (selectedBusiness == BusinessOption.ecofrinedly) {
-                      context.push('/register_user');
+                      context.push('/register_company');
                       return;
                     }
-                    context.push('/register_company');
+                    context.push('/register_user');
                   },
                 ),
               ),
+              const SizedBox(height: 10),
               TextButton(
                 onPressed: () => context.pop(),
-                child: const Text('Volver'),
+                child: Text(
+                  'Volver',
+                  style: titlePrevious,
+                ),
               ),
               const Spacer(
                 flex: 1,

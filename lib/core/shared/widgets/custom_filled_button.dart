@@ -12,9 +12,11 @@ class CustomFilledButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textStyle = Theme.of(context).textTheme.titleMedium;
     return FilledButton(
-      style: const ButtonStyle(
-        backgroundColor: WidgetStatePropertyAll(MyColors.mainColor),
+      style: ButtonStyle(
+        backgroundColor: const WidgetStatePropertyAll(MyColors.mainColor),
+        textStyle: WidgetStatePropertyAll(textStyle),
       ),
       onPressed: onPressed,
       child: Text(text),

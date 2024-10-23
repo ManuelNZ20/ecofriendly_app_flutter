@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../riverpod/providers.dart';
 import 'package:ecofriendly_app/core/shared/shared.dart';
 import 'package:ecofriendly_app/config/theme/styles/colors.dart';
-import 'package:ecofriendly_app/features/auth/presentation/riverpod/login_form_provider.riverpod.dart';
+import 'package:ecofriendly_app/core/utils/functions/show_snackbar.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -49,7 +50,15 @@ class LoginForm extends ConsumerWidget {
           fontWeight: FontWeight.bold,
           fontSize: 24,
         );
-
+    final textChangedPassword =
+        Theme.of(context).textTheme.bodyMedium!.copyWith(
+              color: MyColors.password,
+            );
+    ref.listen(authProvider, (previous, next) {
+      if (next.errorMessage.isNotEmpty) {
+        showSnackbar(context, next.errorMessage);
+      }
+    });
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -68,7 +77,7 @@ class LoginForm extends ConsumerWidget {
             ),
           ),
           Text(
-            '¡Bienvenido a Ecofrinedly!',
+            '¡Bienvenido a Ecofriendly!',
             style: titleLogin,
           ),
           const SizedBox(height: 20),
@@ -76,30 +85,33 @@ class LoginForm extends ConsumerWidget {
             label: 'Correo',
             keyboardType: TextInputType.emailAddress,
             onChanged: ref.read(loginFormProvider.notifier).onEmailChange,
-            errorMessage: loginForm.email.errorMessage,
+            errorMessage:
+                loginForm.isFormPosted ? loginForm.email.errorMessage : null,
           ),
           const SizedBox(height: 20),
           CustomTextField(
             label: 'Contraseña',
-            obscureText: true,
+            obscureText: loginForm.obscureText,
+            onPressed: ref.read(loginFormProvider.notifier).onViewPassword,
             onChanged: ref.read(loginFormProvider.notifier).onPasswordChange,
-            errorMessage: loginForm.email.errorMessage,
+            errorMessage:
+                loginForm.isFormPosted ? loginForm.password.errorMessage : null,
             keyboardType: TextInputType.visiblePassword,
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               TextButton(
                 onPressed: () {},
-                child: const Text(
+                child: Text(
                   '¿Olvidate tu contraseña?',
-                  style: TextStyle(color: MyColors.password),
+                  style: textChangedPassword,
                 ),
               )
             ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 40),
           SizedBox(
             width: double.infinity,
             height: 60,
@@ -110,18 +122,31 @@ class LoginForm extends ConsumerWidget {
               },
             ),
           ),
-          const SizedBox(height: 20),
+          // const SizedBox(height: 20),
+          const Spacer(flex: 2),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('¿No tienes cuenta?'),
+              Text(
+                '¿No tienes cuenta?',
+                style: textChangedPassword.copyWith(
+                  color: Colors.black87,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
               TextButton(
                 onPressed: () => context.push('/business_option'),
-                child: const Text('Registrate'),
+                child: Text(
+                  'Registrate',
+                  style: textChangedPassword.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
               )
             ],
           ),
-          const Spacer(flex: 1),
+          // const Spacer(flex: 1),
         ],
       ),
     );

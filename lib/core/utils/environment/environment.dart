@@ -20,20 +20,10 @@ class Environment {
   static String get anonKey =>
       dotenv.env['SUPABASE_ANON_KEY'] ?? 'Not SUPABASE_ANON_KEY especified';
 
-  // FIREBASE
-  static String get firebaseApiKey =>
-      dotenv.env['FIREBASE_API_KEY'] ?? 'Not FIREBASE_API_KEY especified';
+  // RESEND
+  static String get apiKeyResend =>
+      dotenv.env['API_KEY_RESEND'] ?? 'Not API_KEY_RESEND especified';
 
-  static String get firebaseAppId =>
-      dotenv.env['FIREBASE_APP_ID'] ?? 'Not FIREBASE_APP_ID especified';
-
-  static String get firebaseMessagingSenderId =>
-      dotenv.env['FIREBASE_MESSAGING_SENDER_ID'] ??
-      'Not FIREBASE_MESSAGING_SENDER_ID especified';
-
-  static String get firebaseProjectId =>
-      dotenv.env['FIREBASE_PROJECT_ID'] ?? 'Not FIREBASE_PROJECT_ID especified';
-
-  static String get mapboxAccessToken =>
-      dotenv.env['MAPBOX_ACCESS_TOKEN'] ?? 'Not MAPBOX_ACCESS_TOKEN especified';
+  static String get emailSender =>
+      dotenv.env['EMAIL_SENDER'] ?? 'Not EMAIL_SENDER especified';
 }

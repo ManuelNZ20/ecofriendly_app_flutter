@@ -8,5 +8,6 @@ class AppTheme {
         useMaterial3: true,
         colorSchemeSeed: MyColors.mainColor,
         textTheme: textTheme,
+        appBarTheme: appBarTheme,
       );
 }
