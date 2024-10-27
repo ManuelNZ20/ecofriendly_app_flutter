@@ -31,13 +31,18 @@ class AuthNotifier extends StateNotifier<AuthState> {
     await Future.delayed(const Duration(milliseconds: 500));
     try {
       final userLogin = await authRepository.login(email, password);
+      print(userLogin.idTypeUser);
       if (userLogin.idTypeUser == 1) {
+        print(userLogin.idTypeUser);
         final user = await authRepository.getDataUser(userLogin.id);
         _setLoggedUser(user);
+        return;
       }
       if (userLogin.idTypeUser == 3) {
+        print(userLogin.idTypeUser);
         final company = await authRepository.getDataCompany(userLogin.id);
         _setLoggedCompany(company);
+        return;
       }
       // state = state.copyWith(messageRegister: 'Usuario registrado exitosamente'); Inicia sesion
     } on WrongCredentials {
@@ -147,6 +152,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     await keyValueStorageService.setKeyValue<String>('token', user.tokenAuth!);
     await keyValueStorageService.setKeyValue<int>(
         'type_user', user.idTypeUser!);
+    await keyValueStorageService.setKeyValue<String>('id', user.id);
     state = state.copyWith(
       user: user,
       company: null,
@@ -157,8 +163,11 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   void _setLoggedCompany(CompanyApp company) async {
-    await keyValueStorageService.setKeyValue('token', company.tokenAuth);
-    await keyValueStorageService.setKeyValue('type_user', company.idTypeUser);
+    await keyValueStorageService.setKeyValue<String>(
+        'token', company.tokenAuth!);
+    await keyValueStorageService.setKeyValue<int>(
+        'type_user', company.idTypeUser!);
+    await keyValueStorageService.setKeyValue<String>('id', company.idCompany);
     state = state.copyWith(
       company: company,
       user: null,
@@ -171,6 +180,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> logout({String? errorMessage}) async {
     await keyValueStorageService.removeKey('token');
     await keyValueStorageService.removeKey('type_user');
+    await keyValueStorageService.removeKey('id');
+    // Verificar si los valores se eliminaron correctamente
+    final token = await keyValueStorageService.getValue<String>('token');
+    final typeUser = await keyValueStorageService.getValue<int>('type_user');
+    final id = await keyValueStorageService.getValue<int>('id');
+    if (token != null || typeUser != null || id != null) {
+      print(
+          'Error: el token o el tipo de usuario aún persisten después de logout');
+    }
     state = state.copyWith(
       authStatus: AuthStatus.noAuthenticated,
       user: null,
@@ -178,7 +196,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
       errorMessage: errorMessage ?? '',
       messageRegister: '',
     );
-    authRepository.signOut();
   }
 }
 

@@ -9,6 +9,7 @@ import '../../../../core/utils/functions/show_snackbar.dart';
 import '../riverpod/providers.dart';
 
 class RegisterCompanyScreen extends StatelessWidget {
+  static const String name = 'register_company_screen';
   const RegisterCompanyScreen({super.key});
   @override
   Widget build(BuildContext context) {

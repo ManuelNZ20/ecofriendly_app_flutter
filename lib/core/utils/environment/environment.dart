@@ -26,4 +26,20 @@ class Environment {
 
   static String get emailSender =>
       dotenv.env['EMAIL_SENDER'] ?? 'Not EMAIL_SENDER especified';
+
+  // CLOUDINARY
+  static String get cloudName =>
+      dotenv.env['CLOUD_NAME'] ?? 'Not CLOUD_NAME especified';
+
+  static String get uploadPresetBanner =>
+      dotenv.env['UPLOAD_PRESET_BANNER'] ??
+      'Not UPLOAD_PRESET_BANNER especified';
+
+  static String get uploadPresetProduct =>
+      dotenv.env['UPLOAD_PRESET_PRODUCT'] ??
+      'Not UPLOAD_PRESET_PRODUCT especified';
+
+  static String get uploadPresetCategory =>
+      dotenv.env['UPLOAD_PRESET_CATEGORY'] ??
+      'Not UPLOAD_PRESET_PRODUCT especified';
 }

@@ -9,6 +9,7 @@ import '../../../../core/utils/functions/show_snackbar.dart';
 import '../riverpod/providers.dart';
 
 class RegisterUserScreen extends StatelessWidget {
+  static const String name = 'register_user_screen';
   const RegisterUserScreen({super.key});
 
   @override

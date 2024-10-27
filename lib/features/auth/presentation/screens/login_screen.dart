@@ -8,6 +8,7 @@ import 'package:ecofriendly_app/config/theme/styles/colors.dart';
 import 'package:ecofriendly_app/core/utils/functions/show_snackbar.dart';
 
 class LoginScreen extends StatelessWidget {
+  static const String name = 'login_screen';
   const LoginScreen({super.key});
 
   @override
@@ -120,7 +121,9 @@ class LoginForm extends ConsumerWidget {
             height: 60,
             child: CustomFilledButton(
               text: 'INICIAR SESIÓN',
-              onPressed: ref.read(loginFormProvider.notifier).onFormSubmit,
+              onPressed: !loginForm.isPosting
+                  ? ref.read(loginFormProvider.notifier).onFormSubmit
+                  : null,
             ),
           ),
           // const SizedBox(height: 20),

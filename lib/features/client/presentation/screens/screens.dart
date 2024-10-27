@@ -1,1 +1,1 @@
-export 'package:ecofriendly_app/features/client/presentation/screens/home/home_screen_client.dart';
+export 'home/home_client_screen.dart';

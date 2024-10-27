@@ -9,14 +9,12 @@ class KeyValueStorageImpl extends KeyValueStorageService {
   @override
   Future<T?> getValue<T>(String key) async {
     final prefs = await getSharedPrefs();
-    switch (T) {
-      case const (int):
-        return prefs.getInt(key) as T?;
-      case const (String):
-        return prefs.getString(key) as T?;
-      default:
-        throw UnimplementedError(
-            'GET not implemented for type ${T.runtimeType}');
+    if (T == int) {
+      return prefs.getInt(key) as T?;
+    } else if (T == String) {
+      return prefs.getString(key) as T?;
+    } else {
+      throw UnimplementedError('GET not implemented for type $T');
     }
   }
 
@@ -29,16 +27,12 @@ class KeyValueStorageImpl extends KeyValueStorageService {
   @override
   Future<void> setKeyValue<T>(String key, T value) async {
     final prefs = await getSharedPrefs();
-    switch (T) {
-      case const (int):
-        prefs.setInt(key, value as int);
-        break;
-      case const (String):
-        prefs.setString(key, value as String);
-        break;
-      default:
-        throw UnimplementedError(
-            'Set not implemented for type ${T.runtimeType}');
+    if (T == int) {
+      prefs.setInt(key, value as int);
+    } else if (T == String) {
+      prefs.setString(key, value as String);
+    } else {
+      throw UnimplementedError('Set not implemented for type $T');
     }
   }
 }

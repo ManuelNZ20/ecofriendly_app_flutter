@@ -2,17 +2,18 @@ import 'package:ecofriendly_app/features/auth/presentation/riverpod/auth_provide
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomeScreenCompany extends ConsumerWidget {
-  const HomeScreenCompany({super.key});
+class HomeClientScreen extends ConsumerWidget {
+  static const String name = 'home_client_screen';
+  const HomeClientScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home Screen Company'),
+        title: const Text('Home Screen Client'),
         actions: [
           IconButton(
-            onPressed: () => ref.read(authProvider.notifier).logout(),
+            onPressed: ref.read(authProvider.notifier).logout,
             icon: const Icon(Icons.exit_to_app_rounded),
           )
         ],

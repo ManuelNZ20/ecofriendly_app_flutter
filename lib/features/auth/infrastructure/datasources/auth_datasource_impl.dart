@@ -306,13 +306,12 @@ class AuthDatasourceImpl implements AuthDatasource {
                 password,
                 token_auth,
                 id_type_user
-          ''').eq('email', email).eq('password', password).limit(1).single();
-
+          ''').eq('email', email).eq('password', password);
       if (response.isEmpty) {
         throw CustomError('No se encontró ninguna cuenta en $table', '404');
       }
 
-      return response;
+      return response.first;
     } catch (e) {
       return null;
     }
@@ -321,13 +320,8 @@ class AuthDatasourceImpl implements AuthDatasource {
   @override
   Future<UserApp> getDataUser(String id) async {
     try {
-      final data = await supabase
-          .from('user_app')
-          .select()
-          .eq('id', id)
-          .limit(1)
-          .single();
-      final userModel = UserModel.fromJson(data);
+      final data = await supabase.from('user_app').select().eq('id', id);
+      final userModel = UserModel.fromJson(data.first);
       final userApp = UserAppMapper.userJsonToEntity(userModel);
       return userApp;
     } on TimeoutException {
@@ -338,13 +332,8 @@ class AuthDatasourceImpl implements AuthDatasource {
   @override
   Future<CompanyApp> getDataCompany(String id) async {
     try {
-      final data = await supabase
-          .from('company_app')
-          .select()
-          .eq('id', id)
-          .limit(1)
-          .single();
-      final companyModel = CompanyModel.fromJson(data);
+      final data = await supabase.from('company_app').select().eq('id', id);
+      final companyModel = CompanyModel.fromJson(data.first);
       final companyApp = CompanyAppMapper.companyJsonToEntity(companyModel);
       return companyApp;
     } on TimeoutException {

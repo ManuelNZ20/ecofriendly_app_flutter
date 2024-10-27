@@ -1,13 +1,12 @@
-import 'package:ecofriendly_app/config/theme/styles/colors.dart';
 import 'package:flutter/material.dart';
-
 import 'package:ecofriendly_app/config/theme/styles/styles.dart';
 
 class AppTheme {
-  ThemeData themeData() => ThemeData(
+  ThemeData themeData(bool isDark, Color primaryColor) => ThemeData(
         useMaterial3: true,
-        colorSchemeSeed: MyColors.mainColor,
+        colorSchemeSeed: primaryColor,
         textTheme: textTheme,
         appBarTheme: appBarTheme,
+        brightness: !isDark ? Brightness.light : Brightness.dark,
       );
 }
