@@ -137,7 +137,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       }
 
       if (authStatus == AuthStatus.noAuthenticated) {
-        if (isGoingTo == '/login' || isGoingTo == '/register') return null;
+        if (isGoingTo == '/login' ||
+            isGoingTo == '/business_option' ||
+            isGoingTo == '/register_user' ||
+            isGoingTo == '/register_company') return null;
         return '/login';
       }
       if (authStatus == AuthStatus.authenticated) {

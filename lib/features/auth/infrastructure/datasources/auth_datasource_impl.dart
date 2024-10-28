@@ -166,7 +166,7 @@ class AuthDatasourceImpl implements AuthDatasource {
         throw CustomError('El token es invalido', '500');
       }
       await supabase.from('user_app').update({
-        'state_user_account': true,
+        'state_account': true,
       }).eq('email', email);
       final userModel = UserModel.fromJson(res.first);
       final userApp = UserAppMapper.userJsonToEntity(userModel);

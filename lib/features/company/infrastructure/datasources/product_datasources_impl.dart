@@ -26,37 +26,35 @@ class ProductDatasourceImpl implements ProductDatasource {
     DateTime? expireProduct,
     int idCategory = 0,
   }) async {
-    final imgPath = await CloudinaryInit.uploadImage(
-      img,
-      UploadPreset.product,
-    );
-    await Future.delayed(const Duration(milliseconds: 500));
     try {
-      final idCompany = keyValueStorage.getValue('id');
+      print(img);
+      await Future.delayed(const Duration(milliseconds: 500));
       final response = await supabase.from(table).insert([
         {
           'nameproduct': nameProduct,
           'brand': brand,
           'description': description,
           'statusproduct': status,
-          'imgproduct': imgPath,
+          'imgproduct': img,
           'price': price,
           'amount': amount,
           'expire_product': expireProduct!.toIso8601String(),
           'idcategory': idCategory,
         }
       ]).select();
+      final idCompany = await keyValueStorage.getValue<String>('id');
       final product = _responseProduct(response).first;
+      print(idCompany);
       final idInventory = await supabase
           .from('inventory_company')
-          .select('id')
-          .eq('id_company', idCompany)
-          .limit(1)
-          .single();
+          .select()
+          .eq('id_company', idCompany!);
+      // print('Gestionar Inventorio');
+      print(idInventory.first['id']);
       await supabase.from('inventory_product').insert([
         {
           'id_product': product.idProduct,
-          'id_inventory': idInventory['id'] as int,
+          'id_inventory': idInventory.first['id'] as int,
         }
       ]);
       return product;
@@ -71,25 +69,29 @@ class ProductDatasourceImpl implements ProductDatasource {
   }
 
   @override
-  Stream<List<Product>> getProductsStream() {
+  Stream<List<Product>> getProductsStream() async* {
     // final response =
     //     supabaseClient.from(table).stream(primaryKey: ['idproduct']);
     // final products = response.map((event) => _responseProduct(event));
-    final response =
-        supabase.from('inventory_company').stream(primaryKey: ['id']);
-    final streamProducts = response
-      ..map(
-        (event) => event.map(
-          (e) {
-            final res = supabase.from(table).stream(
-                primaryKey: ['idproduct']).eq('idproduct', e['id_prooduct']);
-            return res;
-          },
-        ),
-      );
+    try {
+      final response =
+          supabase.from('inventory_company').stream(primaryKey: ['id']);
 
-    final products = streamProducts.map((e) => _responseProduct(e));
-    return products;
+      final streamProducts = response
+        ..map(
+          (event) => event.map(
+            (e) {
+              final res = supabase.from(table).stream(
+                  primaryKey: ['idproduct']).eq('idproduct', e['id_prooduct']);
+              return res;
+            },
+          ),
+        );
+      final products = streamProducts.map((e) => _responseProduct(e));
+      yield* products;
+    } catch (e) {
+      throw Exception('ERROR: $e');
+    }
   }
 
   @override
@@ -202,6 +204,7 @@ class ProductDatasourceImpl implements ProductDatasource {
   @override
   Future<List<Product>> getProducts() async {
     try {
+      // final inventoryIds
       final response = await supabase.from(table).select();
       final products = _responseProduct(response);
       return products;
@@ -213,7 +216,10 @@ class ProductDatasourceImpl implements ProductDatasource {
   @override
   Future<List<Product>> getProductsOutstanding() async {
     try {
-      final response = await supabase.from(table).select();
+      final response = await supabase
+          .from(table)
+          .select()
+          .order('create_at', ascending: false);
       final products = _responseProduct(response);
       return products;
     } catch (e) {
@@ -267,6 +273,38 @@ class ProductDatasourceImpl implements ProductDatasource {
           ),
         )
         .toList();
+
     return products;
+  }
+
+  @override
+  Future<List<Product>> getProductsByInventory(int idInventory) async {
+    try {
+      // final idCompany = await keyValueStorage.getValue<String>('id');
+
+      // final responseInventoryCompany = await supabase
+      //     .from('inventory_company')
+      //     .select('id')
+      //     .eq('id_company', idCompany!);
+      // print(responseInventoryCompany.first['id']);
+      print(idInventory);
+      final responseInventoryProduct = await supabase
+          .from('inventory_product')
+          .select('id_product')
+          .eq('id_inventory', idInventory);
+      print(responseInventoryProduct);
+      final listIdsProduct =
+          responseInventoryProduct.map((e) => e['id_product']).toList();
+
+      final response = await supabase
+          .from(table)
+          .select()
+          .inFilter('idproduct', listIdsProduct)
+          .order('create_at', ascending: false);
+      final products = _responseProduct(response);
+      return products;
+    } catch (e) {
+      throw Exception('Error loading products ${e.toString()}');
+    }
   }
 }

@@ -2,9 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'repository/product_repository_provider.riverpod.dart';
 import '../../domain/domain.dart';
 
-final productProvider =
-    StateNotifierProvider.family<ProductNotifier, ProductState, String>(
-        (ref, idProduct) {
+final productProvider = StateNotifierProvider.family
+    .autoDispose<ProductNotifier, ProductState, String>((ref, idProduct) {
   final productRepository = ref.watch(productRepositoryProvider);
   return ProductNotifier(
     idProduct: idProduct,

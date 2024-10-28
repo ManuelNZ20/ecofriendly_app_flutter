@@ -9,6 +9,13 @@ final productsProvider =
   return ProductsNotifier(productRepository: productRepository);
 });
 
+final productsByInventoryProvider =
+    FutureProvider.family<List<Product>, int>((ref, idInventory) async {
+  print(idInventory);
+  final productRepository = ref.watch(productRepositoryProvider);
+  return await productRepository.getProductsByInventory(idInventory);
+});
+
 class ProductsNotifier extends StateNotifier<ProductsState> {
   final ProductRepository productRepository;
 

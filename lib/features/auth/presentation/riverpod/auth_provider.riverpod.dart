@@ -184,7 +184,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     // Verificar si los valores se eliminaron correctamente
     final token = await keyValueStorageService.getValue<String>('token');
     final typeUser = await keyValueStorageService.getValue<int>('type_user');
-    final id = await keyValueStorageService.getValue<int>('id');
+    final id = await keyValueStorageService.getValue<String>('id');
     if (token != null || typeUser != null || id != null) {
       print(
           'Error: el token o el tipo de usuario aún persisten después de logout');

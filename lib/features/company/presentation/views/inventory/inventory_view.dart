@@ -1,4 +1,3 @@
-import 'package:ecofriendly_app/config/router/app_router.dart';
 import 'package:ecofriendly_app/features/company/presentation/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,6 +37,13 @@ class InventoryView extends ConsumerWidget {
               },
             );
           }
+        }
+        if (!snapshot.hasData) {
+          return const Center(
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+            ),
+          );
         }
         return const Center(
           child: Text('Sin inventario'),

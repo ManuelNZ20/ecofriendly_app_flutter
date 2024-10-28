@@ -166,4 +166,10 @@ class ProductRepositoryImpl implements ProductRepository {
     final searchProducts = productDataSource.searchProductsStrean(textSearch);
     return searchProducts;
   }
+
+  @override
+  Future<List<Product>> getProductsByInventory(int idInventory) {
+    final response = productDataSource.getProductsByInventory(idInventory);
+    return response;
+  }
 }

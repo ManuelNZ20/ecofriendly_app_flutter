@@ -12,6 +12,18 @@ final productFormProvider = StateNotifierProvider.family<ProductFormNotifier,
   );
 });
 
+final productFormByInventoryProvider = StateNotifierProvider.family<
+    ProductFormNotifier,
+    ProductFormState,
+    Map<String, dynamic>>((ref, extraData) {
+  final createdOrUpdateProduct =
+      ref.watch(productsProvider.notifier).createdOrUpdatedProduct;
+  return ProductFormNotifier(
+    onSubmitCallback: createdOrUpdateProduct,
+    product: extraData['product'],
+  );
+});
+
 class ProductFormNotifier extends StateNotifier<ProductFormState> {
   final Future<bool> Function(
     String idProduct,
