@@ -172,4 +172,9 @@ class ProductRepositoryImpl implements ProductRepository {
     final response = productDataSource.getProductsByInventory(idInventory);
     return response;
   }
+
+  @override
+  Future<List<Product>> getProductsByCompany(String idCompany) async {
+    return await productDataSource.getProductsByCompany(idCompany);
+  }
 }

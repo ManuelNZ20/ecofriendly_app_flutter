@@ -44,10 +44,17 @@ class CardProduct extends StatelessWidget {
         padding: const EdgeInsets.symmetric(
           horizontal: 6,
         ),
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(12)),
-          color: Colors.white,
-          boxShadow: [
+        decoration: ShapeDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          shape: RoundedRectangleBorder(
+            side: BorderSide(
+              width: SizesApp.sizesCartScreen.wBorderSide - .7,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            borderRadius:
+                BorderRadius.circular(SizesApp.sizesCartScreen.borderRadious),
+          ),
+          shadows: const [
             BoxShadow(
               color: Colors.black26,
               blurRadius: 3,
@@ -146,8 +153,9 @@ class _ImageProduct extends StatelessWidget {
           child: IconButton(
             onPressed: onPressedFavorite,
             icon: Icon(
-              isFavorite ? Icons.eco_outlined : Icons.eco_rounded,
-              color: Colors.grey[400],
+              !isFavorite ? Icons.eco_outlined : Icons.eco_rounded,
+              color: Theme.of(context).colorScheme.primary,
+              size: 35,
             ),
           ),
         ),

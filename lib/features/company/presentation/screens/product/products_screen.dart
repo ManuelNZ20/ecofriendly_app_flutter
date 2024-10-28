@@ -1,4 +1,3 @@
-import 'package:ecofriendly_app/config/router/app_router.dart';
 import 'package:ecofriendly_app/features/company/presentation/providers/products_provider.riverpod.dart';
 import 'package:ecofriendly_app/features/company/presentation/screens/product/product_screen.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +16,6 @@ class ProductsScreen extends ConsumerWidget {
   final int idInventory;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final products =
-    // ref.watch(productsProvider.notifier).getProductsOutstanding();
     final products = ref.watch(productsByInventoryProvider(idInventory));
     return RefreshIndicator(
       onRefresh: () async =>

@@ -1,5 +1,9 @@
+import 'package:ecofriendly_app/core/shared/infrastructure/infrastructure.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../core/shared/infrastructure/service/cloudinary_init.service.riverpod.dart';
+import '../../infrastructure/mapper/product_mapper.dart';
+import '../../infrastructure/models/product.module.dart';
 import 'repository/product_repository_provider.riverpod.dart';
 import '../../domain/domain.dart';
 
@@ -11,9 +15,39 @@ final productsProvider =
 
 final productsByInventoryProvider =
     FutureProvider.family<List<Product>, int>((ref, idInventory) async {
-  print(idInventory);
   final productRepository = ref.watch(productRepositoryProvider);
   return await productRepository.getProductsByInventory(idInventory);
+});
+
+final productsByCompanyProvider =
+    StreamProvider.autoDispose<List<Product>>((ref) async* {
+  final keyValueStorage = KeyValueStorageImpl();
+  final idCompany = await keyValueStorage.getValue<String>('id');
+  final supabase = Supabase.instance.client;
+  final response = await supabase
+      .from('products_company')
+      .stream(primaryKey: ['id'])
+      .eq('id_company', idCompany!)
+      .first;
+  final list = response.map<String>((e) => e['id_product']).toList();
+  print(list);
+
+  final responseProduct = supabase
+      .from('product')
+      .stream(primaryKey: ['idproduct'])
+      .inFilter('idproduct', list)
+      .order('create_at', ascending: false);
+  await for (final productsData in responseProduct) {
+    final products = productsData
+        .map(
+          (product) => ProductMapper.toProductEntity(
+            ProductModel.fromJson(product),
+          ),
+        )
+        .toList();
+    yield products;
+  }
+  // final response =
 });
 
 class ProductsNotifier extends StateNotifier<ProductsState> {

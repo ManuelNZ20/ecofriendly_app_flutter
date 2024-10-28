@@ -96,28 +96,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             },
           ),
           GoRoute(
-            path: 'products/:id_inventory',
-            name: ProductsScreen.name,
+            path: 'product/:id_product',
+            name: ProductCompanyScreen.name,
             builder: (context, state) {
-              final id = state.pathParameters['id_inventory'] ?? 'no-id';
-              return ProductsScreen(
-                idInventory: int.parse(id),
+              final id = state.pathParameters['id_product'] ?? 'no-id';
+              return ProductCompanyScreen(
+                idProduct: id,
               );
             },
-            routes: [
-              GoRoute(
-                path: 'product/:id_product',
-                name: ProductCompanyScreen.name,
-                builder: (context, state) {
-                  final id = state.pathParameters['id_product'] ?? 'no-id';
-                  final data = state.extra as Map<String, dynamic>;
-                  return ProductCompanyScreen(
-                    idProduct: id,
-                    idInventory: data['id_data'] as int,
-                  );
-                },
-              ),
-            ],
           ),
           GoRoute(
             path: 'profile',

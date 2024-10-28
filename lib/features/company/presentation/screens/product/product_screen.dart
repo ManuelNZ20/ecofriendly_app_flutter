@@ -15,10 +15,8 @@ class ProductCompanyScreen extends ConsumerWidget {
   const ProductCompanyScreen({
     super.key,
     required this.idProduct,
-    required this.idInventory,
   });
   final String idProduct;
-  final int idInventory;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final product = ref.watch(productProvider(idProduct));

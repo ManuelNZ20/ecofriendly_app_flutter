@@ -27,7 +27,6 @@ class ProductDatasourceImpl implements ProductDatasource {
     int idCategory = 0,
   }) async {
     try {
-      print(img);
       await Future.delayed(const Duration(milliseconds: 500));
       final response = await supabase.from(table).insert([
         {
@@ -43,21 +42,14 @@ class ProductDatasourceImpl implements ProductDatasource {
         }
       ]).select();
       final idCompany = await keyValueStorage.getValue<String>('id');
-      final product = _responseProduct(response).first;
-      print(idCompany);
-      final idInventory = await supabase
-          .from('inventory_company')
-          .select()
-          .eq('id_company', idCompany!);
-      // print('Gestionar Inventorio');
-      print(idInventory.first['id']);
-      await supabase.from('inventory_product').insert([
+      final product = _responseProduct(response);
+      await supabase.from('products_company').insert([
         {
-          'id_product': product.idProduct,
-          'id_inventory': idInventory.first['id'] as int,
+          'id_product': product.first.idProduct,
+          'id_company': idCompany,
         }
       ]);
-      return product;
+      return product.first;
     } catch (e) {
       throw Exception(e);
     }
@@ -302,6 +294,26 @@ class ProductDatasourceImpl implements ProductDatasource {
           .inFilter('idproduct', listIdsProduct)
           .order('create_at', ascending: false);
       final products = _responseProduct(response);
+      return products;
+    } catch (e) {
+      throw Exception('Error loading products ${e.toString()}');
+    }
+  }
+
+  @override
+  Future<List<Product>> getProductsByCompany(String idCompany) async {
+    try {
+      final response = await supabase
+          .from('products_company')
+          .select('id_product')
+          .eq('id_company', idCompany)
+        ..map((e) => e['id_product']).toList();
+      final responseProduct = await supabase
+          .from(table)
+          .select()
+          .inFilter('idproduct', response)
+          .order('create_at', ascending: false);
+      final products = _responseProduct(responseProduct);
       return products;
     } catch (e) {
       throw Exception('Error loading products ${e.toString()}');

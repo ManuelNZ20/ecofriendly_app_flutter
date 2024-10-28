@@ -1,3 +1,4 @@
+import 'package:ecofriendly_app/config/theme/styles/colors.dart';
 import 'package:flutter/material.dart';
 
 class BrandWithReViews extends StatelessWidget {
@@ -10,16 +11,14 @@ class BrandWithReViews extends StatelessWidget {
   final double reViews;
   @override
   Widget build(BuildContext context) {
+    final titleTopFeedback = Theme.of(context).textTheme.bodyLarge!.copyWith(
+          color: MyColors.colorsCart.starColor,
+        );
     final size = MediaQuery.of(context).size;
     final titleBrand = Theme.of(context).textTheme.titleSmall!.copyWith(
           overflow: TextOverflow.ellipsis,
           fontWeight: FontWeight.w400,
           color: Colors.grey[500],
-          fontSize: 16,
-        );
-    final titleReView = Theme.of(context).textTheme.titleSmall!.copyWith(
-          overflow: TextOverflow.ellipsis,
-          fontWeight: FontWeight.bold,
           fontSize: 16,
         );
     return SizedBox(
@@ -41,13 +40,13 @@ class BrandWithReViews extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(
+                Icon(
                   Icons.star_rate_rounded,
-                  color: Colors.amber,
+                  color: MyColors.colorsCart.starColor,
                 ),
                 Text(
                   reViews.toString(),
-                  style: titleReView,
+                  style: titleTopFeedback,
                 ),
               ],
             ),

@@ -1,10 +1,10 @@
+import 'package:ecofriendly_app/features/company/presentation/riverpod/company_provider.riverpod.dart';
+import 'package:ecofriendly_app/features/company/presentation/views/products/products_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ecofriendly_app/features/auth/presentation/riverpod/auth_provider.riverpod.dart';
 import 'package:ecofriendly_app/features/company/presentation/screens/profile/home_profile_company_screen.dart';
-import 'package:ecofriendly_app/features/company/presentation/views/inventory/inventory_view.dart';
-
 import '../../../../../config/theme/theme.dart';
 import '../../riverpod/tab_controller_provider.riverpod.dart';
 
@@ -13,7 +13,7 @@ class HomeScreenCompany extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tabIndex = ref.watch(tabProvider); // Obtenemos el índice activo
+    final tabIndex = ref.watch(tabProvider);
     final isDark = ref.watch(appThemeProvider);
     final listColors = ref.watch(listColorsProvider);
     final colors = Theme.of(context).colorScheme;
@@ -52,9 +52,8 @@ class HomeScreenCompany extends ConsumerWidget {
         body: const _ContainerTabs(),
         floatingActionButton: tabIndex == 0
             ? FloatingActionButton.extended(
-                onPressed: () =>
-                    context.push('/home_company/inventory_screen/0'),
-                label: const Text('Inventarío'),
+                onPressed: () => context.push('/home_company/product/new'),
+                label: const Text('Producto'),
                 icon: const Icon(Icons.add),
               )
             : tabIndex == 1
@@ -75,19 +74,50 @@ class _ContainerTabs extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = Theme.of(context).colorScheme;
+    final company = ref.watch(companyProvider);
     return SafeArea(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const ListTile(
-            leading: CircleAvatar(
-              radius: 35,
+          company.when(
+            data: (data) => ListTile(
+              leading: const CircleAvatar(
+                radius: 35,
+              ),
+              title: Text(data.nameCompany),
+              subtitle: Text(
+                data.email,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
-            title: Text('Eco Aliado A'),
-            subtitle: Text(
-              'Un eco aliado conocedor de aplicacion, estudiante promotor de nuevas tecnologias e ingenigeria industrial',
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
+            error: (error, stackTrace) {
+              return ListTile(
+                leading: const CircleAvatar(
+                  radius: 35,
+                ),
+                title: const Text('Sin Datos'),
+                subtitle: Text(
+                  'Error: $error',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              );
+            },
+            loading: () => ListTile(
+              leading: const CircleAvatar(
+                radius: 35,
+              ),
+              title: Container(
+                width: 100,
+                height: 15,
+                color: Colors.grey,
+              ),
+              subtitle: Container(
+                width: 100,
+                height: 15,
+                color: Colors.grey,
+              ),
             ),
           ),
           Padding(
@@ -124,7 +154,7 @@ class _ContainerTabs extends ConsumerWidget {
             child: TabBarView(
               physics: NeverScrollableScrollPhysics(), // Desactiva el swipe
               children: [
-                InventoryView(),
+                ProductsView(),
                 Icon(Icons.notification_add),
                 Icon(Icons.message),
               ],

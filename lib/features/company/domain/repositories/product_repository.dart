@@ -53,6 +53,8 @@ abstract class ProductRepository {
 
   Future<List<Product>> getProductsOutstanding();
 
+  Future<List<Product>> getProductsByCompany(String idCompany);
+
   Future<List<Product>> getProductsByInventory(int idInventory);
 
   Future<int> getAmountProducts();
