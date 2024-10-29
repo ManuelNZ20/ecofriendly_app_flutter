@@ -1,20 +1,236 @@
-import 'package:ecofriendly_app/core/shared/shared.dart';
+import 'package:ecofriendly_app/core/shared/infrastructure/infrastructure.dart';
+import 'package:ecofriendly_app/features/company/presentation/providers/company_app_provider.riverpod.dart';
+import 'package:ecofriendly_app/features/company/presentation/providers/forms/company_form_provider.riverpod.dart';
+import 'package:ecofriendly_app/features/company/presentation/riverpod/company_provider.riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../../core/utils/functions/show_snackbar.dart';
+import '../../../../auth/domain/domain.dart';
+import 'package:ecofriendly_app/core/shared/shared.dart';
 
 class HomeProfileCompanyScreen extends ConsumerWidget {
   static const String name = 'home_profile_company_screen';
-  const HomeProfileCompanyScreen({super.key});
+  const HomeProfileCompanyScreen({
+    super.key,
+    required this.idCompany,
+  });
+  final String idCompany;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final user = ref.watch(us)
+    final company = ref.watch(getCompanyDataProvider);
+    final companyRes = ref.watch(companyProvider(idCompany));
     return Scaffold(
       appBar: AppBar(
         leading: const IconButtonArrowBack(),
         title: const Text('Perfil'),
       ),
-      body: const Placeholder(),
+      body: company.when(
+        data: (data) {
+          return CompanyForm(
+            companyApp: data,
+          );
+        },
+        error: (error, stackTrace) {
+          return Center(
+            child: Text('Error: $error'),
+          );
+        },
+        loading: () {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          ref
+              .watch(companyFormProvider(companyRes.company!).notifier)
+              .onFormSubmit()
+              .then((value) {
+            if (!value) return;
+            showSnackbar(context, 'Datos Actualizados');
+          });
+        },
+        icon: const Icon(Icons.save_as_outlined),
+        label: const Text('Guardar'),
+      ),
+    );
+  }
+}
+
+class CompanyForm extends ConsumerWidget {
+  const CompanyForm({
+    super.key,
+    required this.companyApp,
+  });
+
+  final CompanyApp companyApp;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final company = ref.watch(companyProvider(companyApp.idCompany));
+    final size = MediaQuery.of(context).size;
+    final textStyle = Theme.of(context).textTheme.bodyLarge!.copyWith(
+          color: Colors.grey.shade400,
+          fontWeight: FontWeight.w300,
+          fontSize: 14,
+        );
+
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: ListView(
+        children: [
+          SizedBox(
+            width: size.width,
+            height: 140,
+            child: Stack(
+              children: [
+                ImageGalleryForm(
+                  imgUrl: company.company!.bannerCompany!,
+                ),
+                Positioned(
+                  right: 10,
+                  top: 10,
+                  child: IconButton.outlined(
+                    onPressed: () async {
+                      final photoPath =
+                          await CameraGalleryServiceImpl().selectPhoto();
+                      if (photoPath == null) return;
+                      ref
+                          .read(companyFormProvider(company.company!).notifier)
+                          .updateImgBanner(photoPath);
+                    },
+                    icon: const Icon(Icons.image_outlined),
+                  ),
+                ),
+                Positioned(
+                  left: 10,
+                  bottom: 10,
+                  child: Text(
+                    'Banner de la empresa',
+                    style: textStyle,
+                  ),
+                )
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+          SizedBox(
+            width: 150,
+            height: 150,
+            child: Stack(
+              children: [
+                Center(
+                    child: ImageGalleryFormAvatar(
+                  img: company.company!.imgPresentation!,
+                  onPressed: () async {
+                    final photoPath =
+                        await CameraGalleryServiceImpl().selectPhoto();
+                    if (photoPath == null) return;
+                    ref
+                        .read(companyFormProvider(company.company!).notifier)
+                        .updateImgPresentation(photoPath);
+                  },
+                )),
+                Positioned(
+                  left: 10,
+                  bottom: 10,
+                  child: Text(
+                    'Avatar de presentación',
+                    style: textStyle,
+                  ),
+                )
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: _CompanyInformation(
+              companyApp: companyApp,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CompanyInformation extends ConsumerWidget {
+  const _CompanyInformation({
+    required this.companyApp,
+  });
+  final CompanyApp companyApp;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final companyForm = ref.watch(companyFormProvider(companyApp));
+    final textStyle = Theme.of(context).textTheme.bodyLarge!.copyWith(
+          fontWeight: FontWeight.w500,
+        );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Información de la empresa',
+          style: textStyle,
+        ),
+        const SizedBox(height: 15),
+        CustomTextFormField(
+          label: 'Correo de la empresa',
+          initialValue: companyForm.email,
+        ),
+        const SizedBox(height: 15),
+        CustomTextFormField(
+          label: 'Nombre de la Empresa',
+          initialValue: companyForm.nameCompany,
+          onChanged: ref
+              .watch(companyFormProvider(companyApp).notifier)
+              .onNameCompanyChange,
+        ),
+        const SizedBox(height: 15),
+        CustomTextFormField(
+          label: 'Descripción',
+          initialValue: companyForm.description,
+          onChanged: ref
+              .watch(companyFormProvider(companyApp).notifier)
+              .onDescriptionChange,
+          keyboardType: TextInputType.multiline,
+          maxLines: 7,
+        ),
+        const SizedBox(height: 15),
+        CustomTextFormField(
+          label: 'Dirección',
+          initialValue: companyForm.address,
+          onChanged: ref
+              .watch(companyFormProvider(companyApp).notifier)
+              .onAddressChange,
+        ),
+        const SizedBox(height: 15),
+        CustomTextFormField(
+          label: 'Localización o referencia',
+          initialValue: companyForm.location,
+          onChanged: ref
+              .watch(companyFormProvider(companyApp).notifier)
+              .onLocationChange,
+        ),
+        const SizedBox(height: 15),
+        CustomTextFormField(
+          label: 'Ruc',
+          initialValue: companyForm.ruc,
+          onChanged:
+              ref.watch(companyFormProvider(companyApp).notifier).onRucChange,
+        ),
+        const SizedBox(height: 15),
+        CustomTextFormField(
+          label: 'Telefono',
+          initialValue: companyForm.phone,
+          onChanged:
+              ref.watch(companyFormProvider(companyApp).notifier).onPhoneChange,
+          keyboardType: TextInputType.phone,
+        ),
+        const SizedBox(height: 80),
+      ],
     );
   }
 }

@@ -106,10 +106,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             },
           ),
           GoRoute(
-            path: 'profile',
+            path: 'profile/:id_company',
             name: HomeProfileCompanyScreen.name,
             builder: (context, state) {
-              return const HomeProfileCompanyScreen();
+              final id = state.pathParameters['id_company'] ?? 'no-id';
+              return HomeProfileCompanyScreen(
+                idCompany: id,
+              );
             },
           ),
         ],

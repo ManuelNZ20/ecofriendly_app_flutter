@@ -28,8 +28,11 @@ class CustomTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     final border = OutlineInputBorder(
-      borderSide: const BorderSide(),
+      borderSide: BorderSide(
+        color: colors.primary,
+      ),
       borderRadius: BorderRadius.circular(10),
     );
 

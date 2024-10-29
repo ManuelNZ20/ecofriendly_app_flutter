@@ -30,7 +30,6 @@ final productsByCompanyProvider =
       .eq('id_company', idCompany!)
       .first;
   final list = response.map<String>((e) => e['id_product']).toList();
-  print(list);
 
   final responseProduct = supabase
       .from('product')
@@ -47,7 +46,6 @@ final productsByCompanyProvider =
         .toList();
     yield products;
   }
-  // final response =
 });
 
 class ProductsNotifier extends StateNotifier<ProductsState> {

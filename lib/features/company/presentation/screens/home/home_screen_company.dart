@@ -74,7 +74,7 @@ class _ContainerTabs extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = Theme.of(context).colorScheme;
-    final company = ref.watch(companyProvider);
+    final company = ref.watch(getCompanyDataProvider);
     return SafeArea(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -89,6 +89,16 @@ class _ContainerTabs extends ConsumerWidget {
                 data.email,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
+              ),
+              trailing: IconButton(
+                onPressed: () => context.pushNamed(
+                  HomeProfileCompanyScreen.name,
+                  pathParameters: {'id_company': data.idCompany},
+                ),
+                icon: Icon(
+                  Icons.settings,
+                  color: colors.primary,
+                ),
               ),
             ),
             error: (error, stackTrace) {
@@ -117,18 +127,6 @@ class _ContainerTabs extends ConsumerWidget {
                 width: 100,
                 height: 15,
                 color: Colors.grey,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: SizedBox(
-              width: double.infinity,
-              child: FilledButton.icon(
-                icon: const Icon(Icons.person),
-                onPressed: () =>
-                    context.pushNamed(HomeProfileCompanyScreen.name),
-                label: const Text('Mi Perfil'),
               ),
             ),
           ),

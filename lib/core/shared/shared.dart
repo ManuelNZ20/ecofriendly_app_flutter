@@ -9,5 +9,5 @@ export 'widgets/circular_progress_container_image.dart';
 export 'widgets/form_product_discount.dart';
 export 'widgets/drop_down_button_categories.dart';
 export 'widgets/switch_data_status.dart';
-
+export 'widgets/image_gallery_form_avatar.dart';
 export 'supabase_init.dart';
