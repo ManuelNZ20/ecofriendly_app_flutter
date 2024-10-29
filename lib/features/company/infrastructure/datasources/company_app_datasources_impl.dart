@@ -29,8 +29,15 @@ class CompanyAppDatasourcesImpl implements CompanyAppDatasource {
   }
 
   @override
-  Future<CompanyApp> getDataCompanyById(String id) {
-    throw UnimplementedError();
+  Future<CompanyApp> getDataCompanyById(String id) async {
+    try {
+      final res =
+          await supabase.from(table).select().eq('id', id).limit(1).single();
+      final company = responseCompany(res);
+      return company;
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 
   @override

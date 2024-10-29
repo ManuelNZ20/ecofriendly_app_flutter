@@ -3,8 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../auth/domain/domain.dart';
 
-final companyFormProvider = StateNotifierProvider.family<CompanyFormNotifier,
-    CompanyFormState, CompanyApp>((ref, company) {
+final companyFormProvider = StateNotifierProvider.family
+    .autoDispose<CompanyFormNotifier, CompanyFormState, CompanyApp>(
+        (ref, company) {
   final updateDataCompany =
       ref.watch(companiesProvider.notifier).updatedCompany;
   return CompanyFormNotifier(
@@ -44,6 +45,7 @@ class CompanyFormNotifier extends StateNotifier<CompanyFormState> {
             ruc: company.ruc!,
             address: company.address!,
             phone: company.phone,
+            email: company.email,
             urlWeb: company.urlWeb!,
             urlFacebook: company.urlFacebook!,
             urlInstagram: company.urlInstagram!,
@@ -51,15 +53,15 @@ class CompanyFormNotifier extends StateNotifier<CompanyFormState> {
           ),
         );
 
-  void updateImgBanner(String img) {
+  void updateImgBanner(String value) {
     state = state.copyWith(
-      imgPresentation: img,
+      bannerCompany: value,
     );
   }
 
-  void updateImgPresentation(String img) {
+  void updateImgPresentation(String value) {
     state = state.copyWith(
-      imgPresentation: img,
+      imgPresentation: value,
     );
   }
 

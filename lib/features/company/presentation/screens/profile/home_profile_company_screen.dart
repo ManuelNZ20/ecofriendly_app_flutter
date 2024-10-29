@@ -69,7 +69,8 @@ class CompanyForm extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final company = ref.watch(companyProvider(companyApp.idCompany));
+    final company = ref.watch(companyProvider(companyApp.idCompany)).company;
+    final companyForm = ref.watch(companyFormProvider(companyApp));
     final size = MediaQuery.of(context).size;
     final textStyle = Theme.of(context).textTheme.bodyLarge!.copyWith(
           color: Colors.grey.shade400,
@@ -87,7 +88,7 @@ class CompanyForm extends ConsumerWidget {
             child: Stack(
               children: [
                 ImageGalleryForm(
-                  imgUrl: company.company!.bannerCompany!,
+                  imgUrl: companyForm.bannerCompany,
                 ),
                 Positioned(
                   right: 10,
@@ -97,8 +98,9 @@ class CompanyForm extends ConsumerWidget {
                       final photoPath =
                           await CameraGalleryServiceImpl().selectPhoto();
                       if (photoPath == null) return;
+                      print(photoPath);
                       ref
-                          .read(companyFormProvider(company.company!).notifier)
+                          .read(companyFormProvider(company!).notifier)
                           .updateImgBanner(photoPath);
                     },
                     icon: const Icon(Icons.image_outlined),
@@ -123,13 +125,15 @@ class CompanyForm extends ConsumerWidget {
               children: [
                 Center(
                     child: ImageGalleryFormAvatar(
-                  img: company.company!.imgPresentation!,
+                  img: companyForm.imgPresentation,
                   onPressed: () async {
                     final photoPath =
                         await CameraGalleryServiceImpl().selectPhoto();
                     if (photoPath == null) return;
+
+                    print(photoPath);
                     ref
-                        .read(companyFormProvider(company.company!).notifier)
+                        .read(companyFormProvider(company!).notifier)
                         .updateImgPresentation(photoPath);
                   },
                 )),
@@ -185,7 +189,7 @@ class _CompanyInformation extends ConsumerWidget {
           label: 'Nombre de la Empresa',
           initialValue: companyForm.nameCompany,
           onChanged: ref
-              .watch(companyFormProvider(companyApp).notifier)
+              .read(companyFormProvider(companyApp).notifier)
               .onNameCompanyChange,
         ),
         const SizedBox(height: 15),
@@ -193,7 +197,7 @@ class _CompanyInformation extends ConsumerWidget {
           label: 'Descripción',
           initialValue: companyForm.description,
           onChanged: ref
-              .watch(companyFormProvider(companyApp).notifier)
+              .read(companyFormProvider(companyApp).notifier)
               .onDescriptionChange,
           keyboardType: TextInputType.multiline,
           maxLines: 7,
@@ -203,7 +207,7 @@ class _CompanyInformation extends ConsumerWidget {
           label: 'Dirección',
           initialValue: companyForm.address,
           onChanged: ref
-              .watch(companyFormProvider(companyApp).notifier)
+              .read(companyFormProvider(companyApp).notifier)
               .onAddressChange,
         ),
         const SizedBox(height: 15),
@@ -211,7 +215,7 @@ class _CompanyInformation extends ConsumerWidget {
           label: 'Localización o referencia',
           initialValue: companyForm.location,
           onChanged: ref
-              .watch(companyFormProvider(companyApp).notifier)
+              .read(companyFormProvider(companyApp).notifier)
               .onLocationChange,
         ),
         const SizedBox(height: 15),
@@ -219,14 +223,14 @@ class _CompanyInformation extends ConsumerWidget {
           label: 'Ruc',
           initialValue: companyForm.ruc,
           onChanged:
-              ref.watch(companyFormProvider(companyApp).notifier).onRucChange,
+              ref.read(companyFormProvider(companyApp).notifier).onRucChange,
         ),
         const SizedBox(height: 15),
         CustomTextFormField(
           label: 'Telefono',
           initialValue: companyForm.phone,
           onChanged:
-              ref.watch(companyFormProvider(companyApp).notifier).onPhoneChange,
+              ref.read(companyFormProvider(companyApp).notifier).onPhoneChange,
           keyboardType: TextInputType.phone,
         ),
         const SizedBox(height: 80),

@@ -30,6 +30,7 @@ class CompanyNotifier extends StateNotifier<CompanyState> {
   Future<void> loadCompany() async {
     try {
       final company = await companyAppRespository.getDataCompanyById(state.id);
+
       state = state.copyWith(
         isLoading: false,
         company: company,

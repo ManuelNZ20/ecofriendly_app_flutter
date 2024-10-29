@@ -2,7 +2,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 class ImageGalleryForm extends StatelessWidget {
-  const ImageGalleryForm({super.key, required this.imgUrl});
+  const ImageGalleryForm({
+    super.key,
+    required this.imgUrl,
+  });
 
   final String imgUrl;
 
