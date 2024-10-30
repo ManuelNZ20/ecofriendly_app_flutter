@@ -11,7 +11,7 @@ class CardProduct extends StatelessWidget {
     required this.name,
     required this.brand,
     required this.priceOriginal,
-    required this.priceDiscountApplied,
+    this.priceDiscountApplied = 0,
     required this.img,
     this.isFavorite = false,
     this.isPromocion = false,
@@ -227,7 +227,7 @@ class PriceWithPriceDiscount extends StatelessWidget {
             ),
             if (percentageDiscount != 0)
               Text(
-                'S/. $originalPrice',
+                'S/. ${double.parse(originalPrice.toStringAsFixed(2))}',
                 style: textPriceDiscount,
               ),
           ],

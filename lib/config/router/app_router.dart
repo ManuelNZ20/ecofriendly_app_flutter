@@ -1,12 +1,11 @@
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../features/auth/presentation/riverpod/providers.dart';
 import '../../core/shared/infrastructure/infrastructure.dart';
 import '../../features/auth/presentation/screens/screens.dart';
 import '../../features/company/presentation/screens/screens.dart';
 import '../../features/client/presentation/screens/screens.dart';
 import 'app_router_notifier.dart';
+import '../../features/auth/presentation/riverpod/providers.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final goRouterNotifier = ref.read(goRouterNotifierProvider);
@@ -71,13 +70,72 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         },
       ),
       // HOME - CLIENT
-      GoRoute(
-        path: '/home_client',
-        name: HomeClientScreen.name,
-        builder: (context, state) {
-          return const HomeClientScreen();
+      ShellRoute(
+        builder: (context, state, child) {
+          return HomeClientScreen(childView: child);
         },
+        routes: [
+          GoRoute(
+            path: '/',
+            builder: (context, state) => const HomeView(),
+            routes: [
+              // PRODUCT
+              GoRoute(
+                path: 'product/:idProduct',
+                builder: (context, state) {
+                  final idProduct = state.pathParameters['idProduct'];
+                  return ProductDetailScreen(
+                    productId: idProduct!,
+                  );
+                },
+              ),
+              GoRoute(
+                path: 'products-all',
+                builder: (context, state) {
+                  return const ProductsAllScreen();
+                },
+              ),
+              // Categories
+              GoRoute(
+                path: 'categories',
+                builder: (context, state) => const CategoriesScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'productscategories/:idCategory',
+                    builder: (context, state) {
+                      final idCategory = state.pathParameters['idCategory'];
+                      return ProductsByIdCategoryScreen(
+                        categoryId: idCategory!,
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+          GoRoute(
+            path: '/orders',
+            builder: (context, state) => const OrdersView(),
+          ),
+
+          GoRoute(
+            path: '/cart',
+            builder: (context, state) => const CartView(),
+          ),
+          GoRoute(
+            path: '/favorites',
+            builder: (context, state) => const FavoritesView(),
+          ),
+          // CATEGORIES
+        ],
       ),
+      // GoRoute(
+      //   path: '/home_client',
+      //   name: HomeClientScreen.name,
+      //   builder: (context, state) {
+      //     return const HomeClientScreen();
+      //   },
+      // ),
       // HOME - COMPANY
       GoRoute(
         path: '/home_company',
@@ -151,7 +209,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           final typeUser =
               await keyValueStorageService.getValue<int>('type_user');
           if (typeUser == 1) {
-            return '/home_client';
+            return '/';
           }
           return '/home_company';
         }

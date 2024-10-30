@@ -1,7 +1,6 @@
 import 'package:ecofriendly_app/core/shared/infrastructure/infrastructure.dart';
 import 'package:ecofriendly_app/features/company/presentation/providers/company_app_provider.riverpod.dart';
 import 'package:ecofriendly_app/features/company/presentation/providers/forms/company_form_provider.riverpod.dart';
-import 'package:ecofriendly_app/features/company/presentation/screens/home/home_screen_company.dart';
 import 'package:ecofriendly_app/features/company/presentation/screens/profile/page_profile_company.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
