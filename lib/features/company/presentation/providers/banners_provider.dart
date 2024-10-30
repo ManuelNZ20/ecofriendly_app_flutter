@@ -9,6 +9,9 @@ final bannersProvider =
   return BannersCardNotifier(bannerCardRepository: bannerCardRepository);
 });
 
+final bannerByCompanyProvider =
+    StreamProvider.autoDispose<List<BannerCard>>((ref) async* {});
+
 class BannersCardNotifier extends StateNotifier<BannersCardState> {
   final BannerCardRepository bannerCardRepository;
   BannersCardNotifier({

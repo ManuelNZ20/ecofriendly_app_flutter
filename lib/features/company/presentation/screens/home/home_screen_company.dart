@@ -81,8 +81,9 @@ class _ContainerTabs extends ConsumerWidget {
         children: [
           company.when(
             data: (data) => ListTile(
-              leading: const CircleAvatar(
+              leading: CircleAvatar(
                 radius: 35,
+                backgroundImage: NetworkImage(company.value!.imgPresentation!),
               ),
               title: Text(data.nameCompany),
               subtitle: Text(

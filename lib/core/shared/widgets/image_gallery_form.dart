@@ -34,6 +34,7 @@ class ImageGalleryForm extends StatelessWidget {
       imgProvider = FileImage(File(imgUrl));
     }
     return FadeInImage(
+      fit: BoxFit.cover,
       placeholder: const NetworkImage(
         'https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif',
       ),

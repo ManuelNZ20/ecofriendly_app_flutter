@@ -17,14 +17,11 @@ class ImageGalleryFormAvatar extends StatelessWidget {
       height: 150,
       child: Stack(
         children: [
-          CircleAvatar(
-            radius: 150,
-            child: img.isEmpty
-                ? const AvatarImageNotFound()
-                : ImageAvatar(
-                    imgUrl: img,
-                  ),
-          ),
+          img.isEmpty
+              ? const AvatarImageNotFound()
+              : ImageAvatar(
+                  imgUrl: img,
+                ),
           Positioned(
             right: 0,
             top: 0,
@@ -53,11 +50,20 @@ class ImageAvatar extends StatelessWidget {
     } else {
       imgProvider = FileImage(File(imgUrl));
     }
-    return FadeInImage(
-      placeholder: const NetworkImage(
-        'https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif',
+    return Container(
+      width: 150,
+      height: 150,
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(100),
       ),
-      image: imgProvider,
+      child: FadeInImage(
+        fit: BoxFit.cover,
+        placeholder: const NetworkImage(
+          'https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif',
+        ),
+        image: imgProvider,
+      ),
     );
   }
 }

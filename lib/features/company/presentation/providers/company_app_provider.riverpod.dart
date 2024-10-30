@@ -8,9 +8,8 @@ final listCompaniesProvider = FutureProvider<List<CompanyApp>>((ref) async {
   return repository.getCompanies();
 });
 
-final companyProvider =
-    StateNotifierProvider.family<CompanyNotifier, CompanyState, String>(
-        (ref, idCompany) {
+final companyProvider = StateNotifierProvider.family
+    .autoDispose<CompanyNotifier, CompanyState, String>((ref, idCompany) {
   final companyAppRespository = ref.watch(companyAppRepositoryProvider);
   return CompanyNotifier(
     idCompany: idCompany,
@@ -50,7 +49,7 @@ class CompanyState {
   CompanyState({
     required this.id,
     this.company,
-    this.isLoading = false,
+    this.isLoading = true,
     this.isSaving = false,
   });
 

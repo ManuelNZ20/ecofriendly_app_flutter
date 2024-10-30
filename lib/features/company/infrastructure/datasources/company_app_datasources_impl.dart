@@ -74,10 +74,8 @@ class CompanyAppDatasourcesImpl implements CompanyAppDatasource {
             'url_instragram': urlInstagram,
           })
           .eq('id', id)
-          .select()
-          .limit(1)
-          .single();
-      final company = responseCompany(response);
+          .select();
+      final company = responseCompany(response.first);
       return company;
     } catch (e) {
       throw Exception(e);

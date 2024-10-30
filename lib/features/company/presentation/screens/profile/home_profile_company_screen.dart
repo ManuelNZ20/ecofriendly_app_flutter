@@ -1,7 +1,6 @@
 import 'package:ecofriendly_app/core/shared/infrastructure/infrastructure.dart';
 import 'package:ecofriendly_app/features/company/presentation/providers/company_app_provider.riverpod.dart';
 import 'package:ecofriendly_app/features/company/presentation/providers/forms/company_form_provider.riverpod.dart';
-import 'package:ecofriendly_app/features/company/presentation/riverpod/company_provider.riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../core/utils/functions/show_snackbar.dart';
@@ -18,36 +17,25 @@ class HomeProfileCompanyScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final company = ref.watch(getCompanyDataProvider);
+    // final company = ref.watch(getCompanyDataProvider);
     final companyRes = ref.watch(companyProvider(idCompany));
     return Scaffold(
       appBar: AppBar(
         leading: const IconButtonArrowBack(),
         title: const Text('Perfil'),
       ),
-      body: company.when(
-        data: (data) {
-          return CompanyForm(
-            companyApp: data,
-          );
-        },
-        error: (error, stackTrace) {
-          return Center(
-            child: Text('Error: $error'),
-          );
-        },
-        loading: () {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-      ),
+      body: companyRes.isLoading
+          ? const FullScreenLoader()
+          : _CompanyForm(
+              companyApp: companyRes.company!,
+            ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           ref
               .watch(companyFormProvider(companyRes.company!).notifier)
               .onFormSubmit()
               .then((value) {
+            print(value);
             if (!value) return;
             showSnackbar(context, 'Datos Actualizados');
           });
@@ -59,9 +47,8 @@ class HomeProfileCompanyScreen extends ConsumerWidget {
   }
 }
 
-class CompanyForm extends ConsumerWidget {
-  const CompanyForm({
-    super.key,
+class _CompanyForm extends ConsumerWidget {
+  const _CompanyForm({
     required this.companyApp,
   });
 
@@ -69,7 +56,7 @@ class CompanyForm extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final company = ref.watch(companyProvider(companyApp.idCompany)).company;
+    // final company = ref.watch(companyProvider(companyApp.idCompany)).company;
     final companyForm = ref.watch(companyFormProvider(companyApp));
     final size = MediaQuery.of(context).size;
     final textStyle = Theme.of(context).textTheme.bodyLarge!.copyWith(
@@ -87,8 +74,12 @@ class CompanyForm extends ConsumerWidget {
             height: 140,
             child: Stack(
               children: [
-                ImageGalleryForm(
-                  imgUrl: companyForm.bannerCompany,
+                SizedBox(
+                  width: size.width,
+                  height: 140,
+                  child: ImageGalleryForm(
+                    imgUrl: companyForm.bannerCompany,
+                  ),
                 ),
                 Positioned(
                   right: 10,
@@ -100,7 +91,7 @@ class CompanyForm extends ConsumerWidget {
                       if (photoPath == null) return;
                       print(photoPath);
                       ref
-                          .read(companyFormProvider(company!).notifier)
+                          .read(companyFormProvider(companyApp).notifier)
                           .updateImgBanner(photoPath);
                     },
                     icon: const Icon(Icons.image_outlined),
@@ -133,7 +124,7 @@ class CompanyForm extends ConsumerWidget {
 
                     print(photoPath);
                     ref
-                        .read(companyFormProvider(company!).notifier)
+                        .read(companyFormProvider(companyApp).notifier)
                         .updateImgPresentation(photoPath);
                   },
                 )),

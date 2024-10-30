@@ -1,3 +1,4 @@
+import 'package:ecofriendly_app/core/shared/infrastructure/service/cloudinary_init.service.riverpod.dart';
 import 'package:ecofriendly_app/features/company/domain/repositories/company_app_respository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -57,10 +58,14 @@ class CompaniesNotifier extends StateNotifier<CompaniesState> {
     String urlInstagram,
   ) async {
     try {
+      final updateImgPathBanner =
+          await CloudinaryInit.uploadImage(bannerCompany, UploadPreset.banner);
+      final updateImgPathPresentation = await CloudinaryInit.uploadImage(
+          imgPresentation, UploadPreset.banner);
       final company = await companyAppRepository.updateDataCompany(
         id,
-        imgPresentation,
-        bannerCompany,
+        updateImgPathPresentation,
+        updateImgPathBanner,
         nameCompany,
         descriptionCompany,
         location,
