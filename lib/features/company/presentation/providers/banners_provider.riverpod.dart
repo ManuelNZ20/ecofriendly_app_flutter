@@ -1,4 +1,8 @@
+import 'package:ecofriendly_app/core/shared/infrastructure/infrastructure.dart';
+import 'package:ecofriendly_app/features/company/infrastructure/mapper/banner_card_mapper.dart';
+import 'package:ecofriendly_app/features/company/infrastructure/models/banner_card.module.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../domain/domain.dart';
 import 'repository/banner_repository_provider.dart';
 
@@ -11,6 +15,34 @@ final bannersProvider =
 
 final bannerByCompanyProvider =
     StreamProvider.autoDispose<List<BannerCard>>((ref) async* {});
+
+final bannersByCompanyProvider = FutureProvider<List<BannerCard>>((ref) async {
+  final keyValueStorage = KeyValueStorageImpl();
+  final idCompany = await keyValueStorage.getValue<String>('id');
+  final supabase = Supabase.instance.client;
+  final response = await supabase
+      .from('banners_company')
+      .stream(primaryKey: ['id'])
+      .eq('id_company', idCompany!)
+      .first;
+  final list = response.map<int>((e) => e['id_banner']).toList();
+  if (list.isEmpty) {
+    return [];
+  }
+  final responseBanner = supabase
+      .from('banner')
+      .select()
+      .inFilter('idBanner', list)
+      .order('created_at', ascending: false)
+      .then((value) {
+    final banners = value
+        .map((banner) => BannerCardMapper.toBannerCardEntity(
+            BannerCardModel.fromJson(banner)))
+        .toList();
+    return banners;
+  });
+  return responseBanner;
+});
 
 class BannersCardNotifier extends StateNotifier<BannersCardState> {
   final BannerCardRepository bannerCardRepository;

@@ -62,9 +62,6 @@ class ProductDatasourceImpl implements ProductDatasource {
 
   @override
   Stream<List<Product>> getProductsStream() async* {
-    // final response =
-    //     supabaseClient.from(table).stream(primaryKey: ['idproduct']);
-    // final products = response.map((event) => _responseProduct(event));
     try {
       final response =
           supabase.from('inventory_company').stream(primaryKey: ['id']);
@@ -74,7 +71,7 @@ class ProductDatasourceImpl implements ProductDatasource {
           (event) => event.map(
             (e) {
               final res = supabase.from(table).stream(
-                  primaryKey: ['idproduct']).eq('idproduct', e['id_prooduct']);
+                  primaryKey: ['idproduct']).eq('idproduct', e['id_product']);
               return res;
             },
           ),

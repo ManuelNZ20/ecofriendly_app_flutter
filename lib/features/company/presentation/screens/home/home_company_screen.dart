@@ -1,4 +1,5 @@
 import 'package:ecofriendly_app/features/company/presentation/riverpod/company_provider.riverpod.dart';
+import 'package:ecofriendly_app/features/company/presentation/views/banner/banner_view.dart';
 import 'package:ecofriendly_app/features/company/presentation/views/products/products_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,8 +9,8 @@ import 'package:ecofriendly_app/features/company/presentation/screens/profile/ho
 import '../../../../../config/theme/theme.dart';
 import '../../riverpod/tab_controller_provider.riverpod.dart';
 
-class HomeScreenCompany extends ConsumerWidget {
-  const HomeScreenCompany({super.key});
+class HomeCompanyScreen extends ConsumerWidget {
+  const HomeCompanyScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -58,7 +59,7 @@ class HomeScreenCompany extends ConsumerWidget {
               )
             : tabIndex == 1
                 ? FloatingActionButton.extended(
-                    onPressed: () {},
+                    onPressed: () => context.push('/home_company/banner/new'),
                     label: const Text('Avisos'),
                     icon: const Icon(Icons.add),
                   )
@@ -83,7 +84,9 @@ class _ContainerTabs extends ConsumerWidget {
             data: (data) => ListTile(
               leading: CircleAvatar(
                 radius: 35,
-                backgroundImage: NetworkImage(company.value!.imgPresentation!),
+                backgroundImage: company.value!.imgPresentation!.isEmpty
+                    ? null
+                    : NetworkImage(company.value!.imgPresentation!),
               ),
               title: Text(data.nameCompany),
               subtitle: Text(
@@ -154,7 +157,7 @@ class _ContainerTabs extends ConsumerWidget {
               physics: NeverScrollableScrollPhysics(), // Desactiva el swipe
               children: [
                 ProductsView(),
-                Icon(Icons.notification_add),
+                BannersView(),
                 Icon(Icons.message),
               ],
             ),

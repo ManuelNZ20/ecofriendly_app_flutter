@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../../domain/domain.dart';
-import '../banners_provider.dart';
+import '../banners_provider.riverpod.dart';
 
 final bannerFormProvider = StateNotifierProvider.family<BannerFormNotifier,
     BannerFormState, BannerCard>((ref, banner) {

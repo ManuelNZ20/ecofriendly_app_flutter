@@ -19,34 +19,52 @@ final productsByInventoryProvider =
   return await productRepository.getProductsByInventory(idInventory);
 });
 
-final productsByCompanyProvider =
-    StreamProvider.autoDispose<List<Product>>((ref) async* {
-  final keyValueStorage = KeyValueStorageImpl();
-  final idCompany = await keyValueStorage.getValue<String>('id');
+final productsByCompanyProvider = FutureProvider<List<Product>>((ref) async {
+  final idCompany = await _getCompanyId();
+  if (idCompany == null) {
+    throw Exception("Company ID not found in storage");
+  }
   final supabase = Supabase.instance.client;
-  final response = await supabase
-      .from('products_company')
-      .stream(primaryKey: ['id'])
-      .eq('id_company', idCompany!)
-      .first;
-  final list = response.map<String>((e) => e['id_product']).toList();
+
+  final productIds = await _getProductIdsByCompany(supabase, idCompany);
+  if (productIds.isEmpty) {
+    return [];
+  }
 
   final responseProduct = supabase
       .from('product')
-      .stream(primaryKey: ['idproduct'])
-      .inFilter('idproduct', list)
-      .order('create_at', ascending: false);
-  await for (final productsData in responseProduct) {
-    final products = productsData
-        .map(
-          (product) => ProductMapper.toProductEntity(
-            ProductModel.fromJson(product),
-          ),
-        )
-        .toList();
-    yield products;
-  }
+      .select()
+      .inFilter('idproduct', productIds)
+      .order('create_at', ascending: false)
+      .then((value) {
+    final products = value.map(
+      (e) {
+        return ProductMapper.toProductEntity(ProductModel.fromJson(e));
+      },
+    ).toList();
+    return products;
+  });
+  return responseProduct;
 });
+// Función para obtener el ID de la compañía
+Future<String?> _getCompanyId() async {
+  final keyValueStorage = KeyValueStorageImpl();
+  return await keyValueStorage.getValue<String>('id');
+}
+
+// Función para obtener la lista de IDs de productos asociados a la compañía
+Future<List<String>> _getProductIdsByCompany(
+    SupabaseClient supabase, String idCompany) async {
+  final response = await supabase
+      .from('products_company')
+      .select('id_product')
+      .eq('id_company', idCompany);
+
+  if (response.isEmpty) {
+    return [];
+  }
+  return response.map<String>((e) => e['id_product']).toList();
+}
 
 class ProductsNotifier extends StateNotifier<ProductsState> {
   final ProductRepository productRepository;

@@ -1,3 +1,4 @@
+import 'package:ecofriendly_app/core/shared/infrastructure/infrastructure.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../core/shared/infrastructure/service/cloudinary_init.service.riverpod.dart';
 import '../../domain/domain.dart';
@@ -5,11 +6,12 @@ import '../mapper/banner_card_mapper.dart';
 import '../models/banner_card.module.dart';
 
 class BannerCardDatasourceImpl extends BannerCardDatasource {
-  final SupabaseClient supabaseClient;
+  final SupabaseClient supabase;
   static String nameTable = 'banner';
+  final keyValueStorage = KeyValueStorageImpl();
   BannerCardDatasourceImpl({
     SupabaseClient? supabaseClientDatasource,
-  }) : supabaseClient = supabaseClientDatasource ?? Supabase.instance.client;
+  }) : supabase = supabaseClientDatasource ?? Supabase.instance.client;
 
   @override
   Future<BannerCard> createdBanner({
@@ -24,7 +26,7 @@ class BannerCardDatasourceImpl extends BannerCardDatasource {
         await CloudinaryInit.uploadImage(imgUrl, UploadPreset.banner);
     await Future.delayed(const Duration(milliseconds: 500));
     try {
-      final response = await supabaseClient.from(nameTable).insert(
+      final response = await supabase.from(nameTable).insert(
         [
           {
             'title': title,
@@ -37,14 +39,20 @@ class BannerCardDatasourceImpl extends BannerCardDatasource {
           }
         ],
       ).select();
+      final idCompany = await keyValueStorage.getValue<String>('id');
       final banner = response
           .map((banner) => BannerCardMapper.toBannerCardEntity(
               BannerCardModel.fromJson(banner)))
           .toList()
           .first;
+      await supabase.from('banners_company').insert([
+        {
+          'id_banner': banner.idBanner,
+          'id_company': idCompany,
+        }
+      ]);
       return banner;
     } catch (e) {
-      print('Created: $e');
       throw Exception(e);
     }
   }
@@ -57,7 +65,7 @@ class BannerCardDatasourceImpl extends BannerCardDatasource {
   @override
   Future<List<BannerCard>> getBanners() async {
     try {
-      final response = await supabaseClient.from(nameTable).select();
+      final response = await supabase.from(nameTable).select();
       final banners = response
           .map((banner) => BannerCardMapper.toBannerCardEntity(
               BannerCardModel.fromJson(banner)))
@@ -109,7 +117,7 @@ class BannerCardDatasourceImpl extends BannerCardDatasource {
     required String titleLink,
   }) async {
     try {
-      final response = await supabaseClient
+      final response = await supabase
           .from(nameTable)
           .update(
             {
@@ -139,7 +147,7 @@ class BannerCardDatasourceImpl extends BannerCardDatasource {
   @override
   Future<BannerCard> getBannerById({String id = ''}) async {
     try {
-      final response = await supabaseClient.from(nameTable).select().eq(
+      final response = await supabase.from(nameTable).select().eq(
             'idBanner',
             id,
           );

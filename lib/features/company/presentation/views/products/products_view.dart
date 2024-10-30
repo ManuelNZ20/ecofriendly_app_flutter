@@ -30,8 +30,18 @@ class ProductsView extends ConsumerWidget {
           );
         },
         error: (error, stackTrace) {
-          return Center(
-            child: Text('Se presento el siguiente error $error'),
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Se presento el siguiente error $error'),
+              const SizedBox(height: 20),
+              TextButton.icon(
+                onPressed: () async =>
+                    ref.invalidate(productsByCompanyProvider),
+                label: const Text('Intentar otra vez'),
+                icon: const Icon(Icons.replay_outlined),
+              )
+            ],
           );
         },
         loading: () {

@@ -82,19 +82,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/home_company',
         builder: (context, state) {
-          return const HomeScreenCompany();
+          return const HomeCompanyScreen();
         },
         routes: [
-          GoRoute(
-            path: 'inventory_screen/:id',
-            name: InventoryScreen.name,
-            builder: (context, state) {
-              final idInventory = state.pathParameters['id'] ?? 'no-id';
-              return InventoryScreen(
-                idInventory: int.parse(idInventory),
-              );
-            },
-          ),
           GoRoute(
             path: 'product/:id_product',
             name: ProductCompanyScreen.name,
@@ -106,15 +96,36 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             },
           ),
           GoRoute(
-            path: 'profile/:id_company',
-            name: HomeProfileCompanyScreen.name,
+            path: 'banner/:id_banner',
+            name: BannerCompanyScreen.name,
             builder: (context, state) {
-              final id = state.pathParameters['id_company'] ?? 'no-id';
-              return HomeProfileCompanyScreen(
-                idCompany: id,
+              final id = state.pathParameters['id_banner'] ?? 'no-id';
+              return BannerCompanyScreen(
+                idBanner: id,
               );
             },
           ),
+          GoRoute(
+              path: 'profile/:id_company',
+              name: HomeProfileCompanyScreen.name,
+              builder: (context, state) {
+                final id = state.pathParameters['id_company'] ?? 'no-id';
+                return HomeProfileCompanyScreen(
+                  idCompany: id,
+                );
+              },
+              routes: [
+                GoRoute(
+                  path: 'profile_company/:id',
+                  name: PageProfileCompany.name,
+                  builder: (context, state) {
+                    final id = state.pathParameters['id'] ?? 'no-id';
+                    return PageProfileCompany(
+                      idCompany: id,
+                    );
+                  },
+                ),
+              ]),
         ],
       ),
     ],
