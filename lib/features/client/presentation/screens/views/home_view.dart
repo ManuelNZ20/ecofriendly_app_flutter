@@ -2,7 +2,6 @@ import 'package:ecofriendly_app/features/auth/presentation/riverpod/auth_provide
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../config/theme/theme.dart';
-import '../../../../company/presentation/riverpod/tab_controller_provider.riverpod.dart';
 import '../../riverpod/products_provider.dart';
 import '../../widgets/horizontal_products_listview.dart';
 import '../../widgets/widgets.dart';
@@ -14,7 +13,6 @@ class HomeView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final products = ref.watch(productsProvider);
     final colors = Theme.of(context).colorScheme;
-    final tabIndex = ref.watch(tabProvider);
     final isDark = ref.watch(appThemeProvider);
     final listColors = ref.watch(listColorsProvider);
     return CustomScrollView(

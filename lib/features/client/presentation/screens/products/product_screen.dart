@@ -21,9 +21,13 @@ class ProductDetailScreen extends ConsumerWidget {
           fontSize: 24,
         );
     final titlePrice = Theme.of(context).textTheme.bodyLarge!.copyWith(
-          fontSize: 24,
+          fontSize: 30,
           color: Colors.orange,
           overflow: TextOverflow.ellipsis,
+        );
+    final descriptionStyle = Theme.of(context).textTheme.bodyLarge!.copyWith(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
         );
     return Scaffold(
       appBar: AppBar(
@@ -40,8 +44,8 @@ class ProductDetailScreen extends ConsumerWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
+          // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Center(
               child: Image.network(product.img, width: 200, height: 200,
@@ -57,6 +61,7 @@ class ProductDetailScreen extends ConsumerWidget {
             Text(
               product.nameProduct,
               style: titleTheme,
+              maxLines: 4,
             ),
             const SizedBox(height: 8.0),
             Text(product.brand.toUpperCase(),
@@ -65,18 +70,23 @@ class ProductDetailScreen extends ConsumerWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'S/. ${product.productDiscount != null ? (product.price - (product.productDiscount!.discountpercentage * product.price)).toStringAsFixed(2) : product.price.toStringAsFixed(2)}',
-                  style: titlePrice,
-                ),
-                Text(
-                  'S/. ${product.price}',
-                  style: const TextStyle(
-                    fontSize: 24,
-                    color: Colors.grey,
-                    decoration: TextDecoration.lineThrough,
-                    decorationColor: Colors.grey,
-                  ),
+                Row(
+                  children: [
+                    Text(
+                      'S/. ${product.productDiscount != null ? (product.price - (product.productDiscount!.discountpercentage * product.price)).toStringAsFixed(2) : product.price.toStringAsFixed(2)}',
+                      style: titlePrice,
+                    ),
+                    const SizedBox(width: 14),
+                    Text(
+                      'S/. ${product.price}',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        color: Colors.grey,
+                        decoration: TextDecoration.lineThrough,
+                        decorationColor: Colors.grey,
+                      ),
+                    ),
+                  ],
                 ),
                 if (product.productDiscount != null)
                   Text('-${product.productDiscount!.discountpercentage * 100}%',
@@ -113,12 +123,9 @@ class ProductDetailScreen extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 16.0),
-            const Text(
+            Text(
               'Descripción',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: descriptionStyle,
             ),
             const SizedBox(height: 8.0),
             SizedBox(
@@ -128,7 +135,7 @@ class ProductDetailScreen extends ConsumerWidget {
                 child: Text(product.description),
               ),
             ),
-            const Spacer(),
+            const SizedBox(height: 16.0),
             Row(
               children: [
                 IconButton(
@@ -150,7 +157,7 @@ class ProductDetailScreen extends ConsumerWidget {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
-                      // Implementa la lógica de agregar al carrito
+                      // TODO Implementa la lógica de agregar al carrito
                     },
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,

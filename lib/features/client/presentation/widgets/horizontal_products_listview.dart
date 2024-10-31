@@ -87,16 +87,28 @@ class _Title extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final textStyle = Theme.of(context).textTheme.bodyLarge!;
+    final textStyleButton = Theme.of(context).textTheme.bodyLarge!.copyWith(
+          color: colors.primary,
+          fontWeight: FontWeight.w600,
+        );
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10),
       padding: const EdgeInsets.only(top: 10),
       child: Row(
         children: [
-          Text(title),
+          Text(
+            title,
+            style: textStyle,
+          ),
           const Spacer(),
           TextButton(
             onPressed: () => context.push('/products-all'),
-            child: const Text('Ver Todo'),
+            child: Text(
+              'Ver Todo',
+              style: textStyleButton,
+            ),
           ),
         ],
       ),

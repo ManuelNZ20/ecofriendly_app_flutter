@@ -47,7 +47,7 @@ class HomeCompanyScreen extends ConsumerWidget {
                 Icons.exit_to_app_rounded,
                 color: MyColors.password,
               ),
-            )
+            ),
           ],
         ),
         body: const _ContainerTabs(),

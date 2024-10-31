@@ -23,11 +23,12 @@ class BannerCardSwiper extends StatelessWidget {
         .textTheme
         .titleMedium
         ?.copyWith(overflow: TextOverflow.clip);
-    final subTitleTheme = Theme.of(context)
-        .textTheme
-        .bodySmall
-        ?.copyWith(overflow: TextOverflow.clip);
-// Measure title height
+    final subTitleTheme = Theme.of(context).textTheme.titleMedium?.copyWith(
+          overflow: TextOverflow.clip,
+          fontSize: 12,
+          fontWeight: FontWeight.w400,
+        );
+    // Measure title height
     final textPainter = TextPainter(
       text: TextSpan(text: title, style: titleTheme),
       maxLines: title.length > 21 ? 2 : 1,
@@ -81,10 +82,13 @@ class BannerCardSwiper extends StatelessWidget {
                 left: 8,
                 child: FilledButton(
                   onPressed: () {},
-                  child: Text(titleLink,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          )),
+                  child: Text(
+                    titleLink,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          fontSize: 14,
+                        ),
+                  ),
                 ),
               ),
             ],

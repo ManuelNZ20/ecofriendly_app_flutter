@@ -26,3 +26,5 @@ final listShadowCard = <BoxShadow>[
     spreadRadius: 0,
   )
 ];
+
+final labelStyle = GoogleFonts.nunito();

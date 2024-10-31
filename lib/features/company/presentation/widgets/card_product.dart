@@ -92,7 +92,6 @@ class CardProduct extends StatelessWidget {
               isPromotion: isPromocion,
               priceDiscount: priceDiscountApplied,
             )
-            // price
           ],
         ),
       ),
@@ -116,9 +115,10 @@ class _ImageProduct extends StatelessWidget {
   final void Function()? onPressedFavorite;
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     final size = MediaQuery.of(context).size;
     final titlePromotion = Theme.of(context).textTheme.titleMedium!.copyWith(
-          color: Theme.of(context).colorScheme.onPrimary,
+          color: colors.onPrimary,
           fontWeight: FontWeight.bold,
           fontSize: 14,
         );
@@ -167,9 +167,9 @@ class _ImageProduct extends StatelessWidget {
                   width: 80,
                   height: 25,
                   padding: EdgeInsets.zero,
-                  decoration: const BoxDecoration(
-                    color: Colors.amber,
-                    borderRadius: BorderRadius.all(
+                  decoration: BoxDecoration(
+                    color: colors.primary,
+                    borderRadius: const BorderRadius.all(
                       Radius.circular(50),
                     ),
                   ),
