@@ -1,9 +1,4 @@
-import 'package:isar/isar.dart';
-part 'product_client.g.dart';
-
-@collection
 class ProductClient {
-  Id? isarId;
   final String idProduct;
   final String nameProduct;
   final String brand;
