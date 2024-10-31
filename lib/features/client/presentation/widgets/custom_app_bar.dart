@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../config/theme/theme.dart';
 import '../../../auth/domain/domain.dart';
 import '../../../auth/presentation/riverpod/providers.dart';
 import '../../../company/domain/domain.dart';
-import '../../../company/presentation/riverpod/tab_controller_provider.riverpod.dart';
 import '../delegates/search_product_delegate.dart';
 import '../riverpod/search/search_product_provider.dart';
 import '../riverpod/user_provider.dart';
@@ -17,7 +15,6 @@ class CustomAppBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final listColors = ref.watch(listColorsProvider);
     final auth = ref.watch(authProvider);
     final user = ref.watch(userProvider(auth.user!.email));
     return SafeArea(
@@ -51,18 +48,14 @@ class CustomAppBar extends ConsumerWidget {
                     ),
                   ).then((product) {
                     if (product == null) return;
-                    context.push('/product/${product.idProduct}');
+                    context.push('/home/0/product/${product.idProduct}');
                   });
                 },
                 icon: const Icon(Icons.search),
               ),
               IconButton(
-                onPressed: () => context.push('/categories'),
+                onPressed: () => context.push('/home/0/categories'),
                 icon: const Icon(Icons.category_rounded),
-              ),
-              IconButton(
-                onPressed: () => context.push('/user'),
-                icon: const Icon(Icons.person),
               ),
             ],
           ),

@@ -102,7 +102,7 @@ class _Title extends StatelessWidget {
           ),
           const Spacer(),
           TextButton(
-            onPressed: () => context.push('/products-all'),
+            onPressed: () => context.push('/home/0/products-all'),
             child: Text(
               'Ver Todo',
               style: textStyleButton,
