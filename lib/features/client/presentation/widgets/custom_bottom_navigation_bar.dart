@@ -2,40 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
-  const CustomBottomNavigationBar({super.key});
+  const CustomBottomNavigationBar({
+    super.key,
+    required this.currentIndex,
+  });
 
-  int getCurrentIndex(BuildContext context) {
-    final String location = GoRouterState.of(context).matchedLocation;
-    switch (location) {
-      case '/':
-        return 0;
-      case '/orders':
-        return 1;
-      case '/cart':
-        return 2;
-      case '/favorites':
-        return 3;
-      default:
-        return 0;
-    }
-  }
+  final int currentIndex;
 
-  void nItemTapped(BuildContext context, int index) {
+  void onItemTapped(BuildContext context, int index) {
     switch (index) {
       case 0:
-        context.go('/');
+        context.go('/home/0');
         break;
 
       case 1:
-        context.go('/orders');
+        context.go('/home/1');
         break;
 
       case 2:
-        context.go('/cart');
+        context.go('/home/2');
         break;
 
       case 3:
-        context.go('/favorites');
+        context.go('/home/3');
         break;
     }
   }
@@ -45,14 +34,14 @@ class CustomBottomNavigationBar extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
     return BottomNavigationBar(
       elevation: 0,
-      currentIndex: getCurrentIndex(context),
+      currentIndex: currentIndex,
       iconSize: 20,
       selectedFontSize: 12,
       unselectedFontSize: 10,
       fixedColor: colors.primary,
       backgroundColor: colors.surface,
       unselectedItemColor: colors.secondary,
-      onTap: (value) => nItemTapped(context, value),
+      onTap: (value) => onItemTapped(context, value),
       // showUnselectedLabels: true,
       items: const [
         BottomNavigationBarItem(

@@ -70,72 +70,50 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         },
       ),
       // HOME - CLIENT
-      ShellRoute(
-        builder: (context, state, child) {
-          return HomeClientScreen(childView: child);
+      GoRoute(
+        path: '/home/:page',
+        name: HomeClientScreen.name,
+        builder: (context, state) {
+          final pageIndex = int.parse(state.pathParameters['page'] ?? '0');
+          return HomeClientScreen(
+            pageIndex: pageIndex,
+          );
         },
         routes: [
+          // PRODUCT
           GoRoute(
-            path: '/',
-            builder: (context, state) => const HomeView(),
+            path: 'product/:idProduct',
+            builder: (context, state) {
+              final idProduct = state.pathParameters['idProduct'];
+              return ProductDetailScreen(
+                productId: idProduct!,
+              );
+            },
+          ),
+          GoRoute(
+            path: 'products-all',
+            builder: (context, state) {
+              return const ProductsAllScreen();
+            },
+          ),
+          // Categories
+          GoRoute(
+            path: 'categories',
+            builder: (context, state) => const CategoriesScreen(),
             routes: [
-              // PRODUCT
               GoRoute(
-                path: 'product/:idProduct',
+                path: 'productscategories/:idCategory',
                 builder: (context, state) {
-                  final idProduct = state.pathParameters['idProduct'];
-                  return ProductDetailScreen(
-                    productId: idProduct!,
+                  final idCategory = state.pathParameters['idCategory'];
+                  return ProductsByIdCategoryScreen(
+                    categoryId: idCategory!,
                   );
                 },
               ),
-              GoRoute(
-                path: 'products-all',
-                builder: (context, state) {
-                  return const ProductsAllScreen();
-                },
-              ),
-              // Categories
-              GoRoute(
-                path: 'categories',
-                builder: (context, state) => const CategoriesScreen(),
-                routes: [
-                  GoRoute(
-                    path: 'productscategories/:idCategory',
-                    builder: (context, state) {
-                      final idCategory = state.pathParameters['idCategory'];
-                      return ProductsByIdCategoryScreen(
-                        categoryId: idCategory!,
-                      );
-                    },
-                  ),
-                ],
-              ),
             ],
           ),
-          GoRoute(
-            path: '/orders',
-            builder: (context, state) => const OrdersView(),
-          ),
-
-          GoRoute(
-            path: '/cart',
-            builder: (context, state) => const CartView(),
-          ),
-          GoRoute(
-            path: '/favorites',
-            builder: (context, state) => const FavoritesView(),
-          ),
-          // CATEGORIES
         ],
       ),
-      // GoRoute(
-      //   path: '/home_client',
-      //   name: HomeClientScreen.name,
-      //   builder: (context, state) {
-      //     return const HomeClientScreen();
-      //   },
-      // ),
       // HOME - COMPANY
       GoRoute(
         path: '/home_company',
@@ -209,7 +187,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           final typeUser =
               await keyValueStorageService.getValue<int>('type_user');
           if (typeUser == 1) {
-            return '/';
+            return '/home/0';
           }
           return '/home_company';
         }

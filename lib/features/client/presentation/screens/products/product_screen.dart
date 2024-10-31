@@ -35,9 +35,15 @@ class ProductDetailScreen extends ConsumerWidget {
         title: const Text('Detalles del producto'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.shopping_cart),
+            icon: Icon(
+              ref.watch(productsProvider.select((state) => state.products
+                      .firstWhere((product) => product.idProduct == productId)
+                      .isFavorite!))
+                  ? Icons.favorite
+                  : Icons.favorite_border,
+            ),
             onPressed: () {
-              // Implementa la lógica del carrito
+              ref.read(productsProvider.notifier).toggleFavorite(productId);
             },
           ),
         ],
@@ -139,18 +145,9 @@ class ProductDetailScreen extends ConsumerWidget {
             Row(
               children: [
                 IconButton(
-                  icon: Icon(
-                    ref.watch(productsProvider.select((state) => state.products
-                            .firstWhere(
-                                (product) => product.idProduct == productId)
-                            .isFavorite!))
-                        ? Icons.favorite
-                        : Icons.favorite_border,
-                  ),
+                  icon: const Icon(Icons.eco_outlined),
                   onPressed: () {
-                    ref
-                        .read(productsProvider.notifier)
-                        .toggleFavorite(productId);
+                    // Implementa la lógica del carrito
                   },
                 ),
                 const SizedBox(width: 8.0),

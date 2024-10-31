@@ -13,26 +13,36 @@ class GridViewProductsClientAllFavorite extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return GridView.builder(
-      itemCount: products.length,
-      padding: const EdgeInsets.all(5),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        mainAxisSpacing: 8,
-        crossAxisSpacing: 8,
-        mainAxisExtent: 250,
-      ),
-      itemBuilder: (context, index) {
-        final product = products[index];
-        return CardProductFavorite(
-          id: product.idProduct,
-          name: product.nameProduct,
-          img: product.img,
-          location: '/product/${product.idProduct}',
-          isFavorite: product.isFavorite!,
-          price: product.price,
-        );
-      },
-    );
+    return products.isNotEmpty
+        ? GridView.builder(
+            itemCount: products.length,
+            padding: const EdgeInsets.all(5),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 8,
+              mainAxisExtent: 250,
+            ),
+            itemBuilder: (context, index) {
+              final product = products[index];
+              return CardProductFavorite(
+                id: product.idProduct,
+                name: product.nameProduct,
+                img: product.img,
+                location: '/home/0/product/${product.idProduct}',
+                isFavorite: product.isFavorite!,
+                price: product.price,
+              );
+            },
+          )
+        : const Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.energy_savings_leaf_outlined),
+                Text('Sin favoritos'),
+              ],
+            ),
+          );
   }
 }

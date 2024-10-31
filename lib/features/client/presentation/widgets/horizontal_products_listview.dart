@@ -36,7 +36,7 @@ class HorizontalProductsListView extends ConsumerWidget {
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   child: product.productDiscount != null
                       ? CardProduct(
-                          location: '/product/${product.idProduct}',
+                          location: '/home/0/product/${product.idProduct}',
                           name: product.nameProduct,
                           brand: product.brand,
                           priceOriginal: product.price -
@@ -55,7 +55,7 @@ class HorizontalProductsListView extends ConsumerWidget {
                               product.productDiscount!.discountpercentage,
                         )
                       : CardProduct(
-                          location: '/product/${product.idProduct}',
+                          location: '/home/0/product/${product.idProduct}',
                           name: product.nameProduct,
                           brand: product.brand,
                           priceOriginal: product.price,

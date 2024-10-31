@@ -11,7 +11,7 @@ class FavoritesView extends ConsumerWidget {
     final productFavorites = ref.watch(productsProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Favorites'),
+        title: const Text('Productos Favoritos'),
       ),
       body: GridViewProductsClientAllFavorite(
         products: productFavorites.products
