@@ -38,10 +38,9 @@ class GridViewProductsClientAll extends ConsumerWidget {
                 name: product.nameProduct,
                 brand: product.brand,
                 priceOriginal: product.price -
-                    (product.productDiscount == null
+                    (product.idproductdiscount.isEmpty
                         ? 0
-                        : (product.price *
-                            product.productDiscount!.discountpercentage)),
+                        : (product.price * product.discountpercentage)),
                 img: product.img,
                 onPressedFavorite: () {
                   ref
@@ -51,9 +50,9 @@ class GridViewProductsClientAll extends ConsumerWidget {
                 isFavorite: product.isFavorite!,
                 isPromocion: isPromotion!,
                 priceDiscountApplied: product.price,
-                offPercentage: product.productDiscount == null
+                offPercentage: product.idproductdiscount.isEmpty
                     ? 0
-                    : product.productDiscount!.discountpercentage,
+                    : product.discountpercentage,
               )
             : CardProduct(
                 location: '/product/${product.idProduct}',

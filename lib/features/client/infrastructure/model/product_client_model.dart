@@ -15,7 +15,9 @@ class ProductClientModel {
   final DateTime updateAt;
   final DateTime expireProduct;
   final int idcategory;
-  final List<ProductClientDiscount> productdiscount;
+  // final List<ProductClientDiscount> productdiscount;
+  final String idproductdiscount;
+  final double discountpercentage; //discount_percentage
 
   ProductClientModel({
     required this.idproduct,
@@ -30,7 +32,8 @@ class ProductClientModel {
     required this.updateAt,
     required this.expireProduct,
     required this.idcategory,
-    required this.productdiscount,
+    required this.idproductdiscount,
+    required this.discountpercentage,
   });
 
   factory ProductClientModel.fromJson(Map<String, dynamic> json) {
@@ -65,7 +68,12 @@ class ProductClientModel {
       expireProduct:
           DateTime.parse(json["expire_product"] ?? DateTime.now().toString()),
       idcategory: json["idcategory"],
-      productdiscount: productDiscountList,
+      idproductdiscount: productDiscountList.isEmpty
+          ? ''
+          : productDiscountList.first.idproductdiscount,
+      discountpercentage: productDiscountList.isEmpty
+          ? 0.0
+          : productDiscountList.first.discountpercentage,
     );
   }
 }

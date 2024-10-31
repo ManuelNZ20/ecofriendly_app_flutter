@@ -74,7 +74,7 @@ class HomeView extends ConsumerWidget {
                         ? HorizontalProductsListView(
                             products: products.products
                                 .where((element) =>
-                                    element.productDiscount != null)
+                                    element.idproductdiscount.isNotEmpty)
                                 .toList(),
                             title: 'Populares',
                             isPromotion: false,

@@ -34,14 +34,13 @@ class HorizontalProductsListView extends ConsumerWidget {
                   width: 190,
                   margin:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: product.productDiscount != null
+                  child: product.idproductdiscount.isNotEmpty
                       ? CardProduct(
                           location: '/home/0/product/${product.idProduct}',
                           name: product.nameProduct,
                           brand: product.brand,
                           priceOriginal: product.price -
-                              (product.price *
-                                  product.productDiscount!.discountpercentage),
+                              (product.price * product.discountpercentage),
                           img: product.img,
                           onPressedFavorite: () {
                             ref
@@ -51,8 +50,7 @@ class HorizontalProductsListView extends ConsumerWidget {
                           isFavorite: product.isFavorite!,
                           isPromocion: isPromotion,
                           priceDiscountApplied: product.price,
-                          offPercentage:
-                              product.productDiscount!.discountpercentage,
+                          offPercentage: product.discountpercentage,
                         )
                       : CardProduct(
                           location: '/home/0/product/${product.idProduct}',

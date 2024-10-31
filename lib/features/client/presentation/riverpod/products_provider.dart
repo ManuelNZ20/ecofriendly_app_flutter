@@ -27,7 +27,7 @@ class ProductsNotifier extends StateNotifier<ProductsState> {
 
   List<ProductClient> getProductsWithDiscount() {
     return state.products
-        .where((element) => element.productDiscount != null)
+        .where((element) => element.idproductdiscount.isNotEmpty)
         .toList();
   }
 

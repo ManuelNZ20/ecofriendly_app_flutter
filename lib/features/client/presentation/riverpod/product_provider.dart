@@ -43,12 +43,8 @@ class ProductNotifier extends StateNotifier<ProductState> {
       updateAt: DateTime.now(),
       expireProduct: DateTime(2024, DateTime.december, 10, 11, 59),
       idCategory: 0,
-      productDiscount: ProductClientDiscount(
-        idproductdiscount: 'new',
-        discountpercentage: 0,
-        createdAt: DateTime.now(),
-        idproduct: '',
-      ),
+      idproductdiscount: 'new',
+      discountpercentage: 0,
     );
   }
 

@@ -1,6 +1,9 @@
-import 'product_discount_client.dart';
+import 'package:isar/isar.dart';
+part 'product_client.g.dart';
 
+@collection
 class ProductClient {
+  Id? isarId;
   final String idProduct;
   final String nameProduct;
   final String brand;
@@ -13,7 +16,9 @@ class ProductClient {
   final DateTime updateAt;
   final DateTime expireProduct;
   final int idCategory;
-  final ProductClientDiscount? productDiscount;
+  // final ProductClientDiscount? productDiscount;
+  final String idproductdiscount;
+  final double discountpercentage; //discount_percentage
   final bool? isFavorite;
 
   ProductClient({
@@ -29,7 +34,9 @@ class ProductClient {
     required this.updateAt,
     required this.expireProduct,
     required this.idCategory,
-    required this.productDiscount,
+    required this.idproductdiscount,
+    required this.discountpercentage,
+    // required this.productDiscount,
     this.isFavorite = false,
   });
 
@@ -46,7 +53,8 @@ class ProductClient {
     DateTime? updateAt,
     DateTime? expireProduct,
     int? idCategory,
-    ProductClientDiscount? productDiscount,
+    String? idproductdiscount,
+    double? discountpercentage,
     bool? isFavorite,
   }) =>
       ProductClient(
@@ -62,7 +70,8 @@ class ProductClient {
         updateAt: updateAt ?? this.updateAt,
         expireProduct: expireProduct ?? this.expireProduct,
         idCategory: idCategory ?? this.idCategory,
-        productDiscount: productDiscount ?? this.productDiscount,
+        idproductdiscount: idproductdiscount ?? this.idproductdiscount,
+        discountpercentage: discountpercentage ?? this.discountpercentage,
         isFavorite: isFavorite ?? this.isFavorite,
       );
 }

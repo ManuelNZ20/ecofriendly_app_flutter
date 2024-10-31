@@ -79,7 +79,7 @@ class ProductDetailScreen extends ConsumerWidget {
                 Row(
                   children: [
                     Text(
-                      'S/. ${product.productDiscount != null ? (product.price - (product.productDiscount!.discountpercentage * product.price)).toStringAsFixed(2) : product.price.toStringAsFixed(2)}',
+                      'S/. ${product.discountpercentage != 0 ? (product.price - (product.discountpercentage * product.price)).toStringAsFixed(2) : product.price.toStringAsFixed(2)}',
                       style: titlePrice,
                     ),
                     const SizedBox(width: 14),
@@ -94,8 +94,8 @@ class ProductDetailScreen extends ConsumerWidget {
                     ),
                   ],
                 ),
-                if (product.productDiscount != null)
-                  Text('-${product.productDiscount!.discountpercentage * 100}%',
+                if (product.discountpercentage != 0.0)
+                  Text('-${product.discountpercentage * 100}%',
                       style: const TextStyle(fontSize: 16, color: Colors.red)),
               ],
             ),
