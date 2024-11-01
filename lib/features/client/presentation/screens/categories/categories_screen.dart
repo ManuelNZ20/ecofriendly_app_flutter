@@ -63,7 +63,8 @@ class CategoriesViewState extends ConsumerState<_CategoriesView> {
           return CardCategory(
             title: category.name,
             imgUrl: category.img,
-            location: '/categories/productscategories/${category.idCategory}',
+            location:
+                '/home/0/categories/productscategories/${category.idCategory}',
             isActive: category.status,
           );
         },

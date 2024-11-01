@@ -34,7 +34,7 @@ class GridViewProductsClientAll extends ConsumerWidget {
         final product = products[index];
         return isPromotion!
             ? CardProduct(
-                location: '/product/${product.idProduct}',
+                location: '/home/0/product/${product.idProduct}',
                 name: product.nameProduct,
                 brand: product.brand,
                 priceOriginal: product.price -
@@ -55,7 +55,7 @@ class GridViewProductsClientAll extends ConsumerWidget {
                     : product.discountpercentage,
               )
             : CardProduct(
-                location: '/product/${product.idProduct}',
+                location: '/home/0/product/${product.idProduct}',
                 name: product.nameProduct,
                 brand: product.brand,
                 priceOriginal: product.price,

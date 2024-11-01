@@ -5,6 +5,7 @@ final textTheme = TextTheme(
   titleLarge: GoogleFonts.nunito(),
   titleMedium: GoogleFonts.nunito(),
   bodyLarge: GoogleFonts.nunito(),
+  bodySmall: GoogleFonts.nunitoSans(),
 );
 const filledButtonStyle = FilledButtonThemeData();
 const appBarTheme = AppBarTheme(

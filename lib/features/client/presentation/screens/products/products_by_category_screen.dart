@@ -23,32 +23,54 @@ class ProductsByIdCategoryScreen extends ConsumerWidget {
     final products = ref
         .watch(productsProvider.notifier)
         .getProductsByIdCategory(idCategory: idCategory);
+    final messageEmpty = Theme.of(context).textTheme.bodySmall!.copyWith(
+          color: Theme.of(context).colorScheme.primary,
+          fontWeight: FontWeight.w300,
+          fontSize: 14,
+        );
     return Scaffold(
-      appBar: AppBar(
-        leading: const IconButtonArrowBack(),
-        title: category.isLoading
-            ? const Text('Cargando...')
-            : Text(category.categoryCard!.name),
-        actions: [
-          Text(
-            '${products.length}',
-            style: titleNumber,
-          ),
-          const SizedBox(width: 5),
-          const Icon(
-            Icons.category_rounded,
-          ),
-        ],
-      ),
-      body: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 2,
-            vertical: 2,
-          ),
-          child: GridViewProductsClientAll(
-            products: products,
-            isPromotion: true,
-          )),
-    );
+        appBar: AppBar(
+          leading: const IconButtonArrowBack(),
+          title: category.isLoading
+              ? const Text('Cargando...')
+              : Text(category.categoryCard!.name),
+          actions: [
+            Text(
+              '${products.length}',
+              style: titleNumber,
+            ),
+            const SizedBox(width: 5),
+            const Icon(
+              Icons.category_rounded,
+            ),
+          ],
+        ),
+        body: products.isNotEmpty
+            ? Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 2,
+                  vertical: 2,
+                ),
+                child: GridViewProductsClientAll(
+                  products: products,
+                  isPromotion: true,
+                ))
+            : Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.layers_clear_outlined,
+                      size: 50,
+                      weight: .5,
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      'Sin productos',
+                      style: messageEmpty,
+                    ),
+                  ],
+                ),
+              ));
   }
 }
