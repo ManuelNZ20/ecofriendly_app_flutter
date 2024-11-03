@@ -55,6 +55,7 @@ class CloudinaryInit {
         return await url;
       }
     } catch (e) {
+      print(e);
       throw Exception(e);
     }
     return '';

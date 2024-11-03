@@ -5,7 +5,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../auth/infrastructure/infrastructure.dart';
 
-final getCompanyDataProvider = FutureProvider<CompanyApp>((ref) async {
+final getCompanyDataProvider =
+    FutureProvider.autoDispose<CompanyApp>((ref) async {
   final supabase = Supabase.instance.client;
   final keyValueStorage = KeyValueStorageImpl();
   final idCompany = await keyValueStorage.getValue<String>('id');

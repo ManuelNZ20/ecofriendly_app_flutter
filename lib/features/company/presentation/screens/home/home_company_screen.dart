@@ -42,6 +42,13 @@ class HomeCompanyScreen extends ConsumerWidget {
                   : MyColors.themeColors.darkMode,
             ),
             IconButton(
+              onPressed: () async => ref.invalidate(getCompanyDataProvider),
+              icon: Icon(
+                Icons.replay_circle_filled_rounded,
+                color: colors.primary,
+              ),
+            ),
+            IconButton(
               onPressed: ref.read(authProvider.notifier).logout,
               icon: const Icon(
                 Icons.exit_to_app_rounded,

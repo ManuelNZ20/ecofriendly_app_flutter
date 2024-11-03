@@ -58,14 +58,22 @@ class CompaniesNotifier extends StateNotifier<CompaniesState> {
     String urlInstagram,
   ) async {
     try {
-      final updateImgPathBanner =
-          await CloudinaryInit.uploadImage(bannerCompany, UploadPreset.banner);
-      final updateImgPathPresentation = await CloudinaryInit.uploadImage(
-          imgPresentation, UploadPreset.banner);
+      String uploadImgPresentation = imgPresentation;
+      String uploadImgBanner = bannerCompany;
+      if (!(imgPresentation.startsWith('http') ||
+          imgPresentation.startsWith('https'))) {
+        uploadImgPresentation = await CloudinaryInit.uploadImage(
+            imgPresentation, UploadPreset.banner);
+      }
+      if (!(bannerCompany.startsWith('http') ||
+          bannerCompany.startsWith('https'))) {
+        uploadImgBanner = await CloudinaryInit.uploadImage(
+            bannerCompany, UploadPreset.banner);
+      }
       final company = await companyAppRepository.updateDataCompany(
         id,
-        updateImgPathPresentation,
-        updateImgPathBanner,
+        uploadImgPresentation,
+        uploadImgBanner,
         nameCompany,
         descriptionCompany,
         location,
@@ -82,8 +90,10 @@ class CompaniesNotifier extends StateNotifier<CompaniesState> {
             .map((e) => (e.idCompany == id) ? company : e)
             .toList(),
       );
+      print('END');
       return true;
     } catch (e) {
+      print('ERR');
       return false;
     }
   }

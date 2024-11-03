@@ -152,7 +152,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               },
               routes: [
                 GoRoute(
-                  path: 'profile_company/:id',
+                  path: 'page_company/:id',
                   name: PageProfileCompany.name,
                   builder: (context, state) {
                     final id = state.pathParameters['id'] ?? 'no-id';

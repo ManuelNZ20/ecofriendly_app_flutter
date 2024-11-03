@@ -1,7 +1,7 @@
 import 'package:ecofriendly_app/core/shared/infrastructure/infrastructure.dart';
 import 'package:ecofriendly_app/features/company/presentation/providers/company_app_provider.riverpod.dart';
 import 'package:ecofriendly_app/features/company/presentation/providers/forms/company_form_provider.riverpod.dart';
-import 'package:ecofriendly_app/features/company/presentation/screens/profile/page_profile_company.dart';
+import 'package:ecofriendly_app/features/company/presentation/screens/profile/page/page_profile_company.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -70,7 +70,6 @@ class _CompanyForm extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final company = ref.watch(companyProvider(companyApp.idCompany)).company;
     final companyForm = ref.watch(companyFormProvider(companyApp));
     final size = MediaQuery.of(context).size;
     final textStyle = Theme.of(context).textTheme.bodyLarge!.copyWith(
@@ -103,7 +102,6 @@ class _CompanyForm extends ConsumerWidget {
                       final photoPath =
                           await CameraGalleryServiceImpl().selectPhoto();
                       if (photoPath == null) return;
-                      print(photoPath);
                       ref
                           .read(companyFormProvider(companyApp).notifier)
                           .updateImgBanner(photoPath);
@@ -135,8 +133,6 @@ class _CompanyForm extends ConsumerWidget {
                     final photoPath =
                         await CameraGalleryServiceImpl().selectPhoto();
                     if (photoPath == null) return;
-
-                    print(photoPath);
                     ref
                         .read(companyFormProvider(companyApp).notifier)
                         .updateImgPresentation(photoPath);
