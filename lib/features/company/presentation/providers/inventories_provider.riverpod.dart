@@ -1,6 +1,6 @@
-import 'package:ecofriendly_app/features/company/domain/domain.dart';
-import 'package:ecofriendly_app/features/company/presentation/providers/repository/inventory_repository.riverpod.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'repository/inventory_repository.riverpod.dart';
+import 'package:ecofriendly_app/features/company/domain/domain.dart';
 
 final inventoriesProvider =
     StateNotifierProvider<InventoryNotifier, InventoryState>((ref) {

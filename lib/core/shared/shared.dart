@@ -13,3 +13,4 @@ export 'widgets/image_gallery_form_avatar.dart';
 export 'widgets/card_banner_swiper.dart';
 export 'widgets/chip_state_card.dart';
 export 'supabase_init.dart';
+export 'infrastructure/infrastructure.dart';

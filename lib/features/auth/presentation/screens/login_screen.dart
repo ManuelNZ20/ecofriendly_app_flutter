@@ -134,7 +134,6 @@ class LoginForm extends ConsumerWidget {
               Text(
                 '¿No tienes cuenta?',
                 style: textChangedPassword.copyWith(
-                  color: Colors.black87,
                   fontWeight: FontWeight.w300,
                 ),
               ),

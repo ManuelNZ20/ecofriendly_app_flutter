@@ -1,9 +1,8 @@
-import 'package:ecofriendly_app/core/shared/infrastructure/service/cloudinary_init.service.riverpod.dart';
-import 'package:ecofriendly_app/features/company/domain/repositories/company_app_respository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../../auth/domain/domain.dart';
 import 'repository/company_app_repository.riverpod.dart';
+import 'package:ecofriendly_app/features/company/domain/repositories/company_app_respository.dart';
+import 'package:ecofriendly_app/core/shared/infrastructure/service/cloudinary_init.service.riverpod.dart';
 
 final companiesProvider =
     StateNotifierProvider<CompaniesNotifier, CompaniesState>((ref) {

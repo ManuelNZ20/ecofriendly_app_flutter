@@ -1,13 +1,13 @@
-import 'package:ecofriendly_app/core/shared/infrastructure/infrastructure.dart';
-import 'package:ecofriendly_app/features/company/presentation/providers/company_app_provider.riverpod.dart';
-import 'package:ecofriendly_app/features/company/presentation/providers/forms/company_form_provider.riverpod.dart';
-import 'package:ecofriendly_app/features/company/presentation/screens/profile/page/page_profile_company.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../../../../core/utils/functions/show_snackbar.dart';
 import '../../../../auth/domain/domain.dart';
+import '../../providers/providers.dart';
 import 'package:ecofriendly_app/core/shared/shared.dart';
+import 'package:ecofriendly_app/features/company/presentation/providers/forms/company_form_provider.riverpod.dart';
+import 'package:ecofriendly_app/features/company/presentation/screens/profile/page/page_profile_company.dart';
 
 class HomeProfileCompanyScreen extends ConsumerWidget {
   static const String name = 'home_profile_company_screen';
@@ -49,7 +49,6 @@ class HomeProfileCompanyScreen extends ConsumerWidget {
               .watch(companyFormProvider(companyRes.company!).notifier)
               .onFormSubmit()
               .then((value) {
-            print(value);
             if (!value) return;
             showSnackbar(context, 'Datos Actualizados');
           });

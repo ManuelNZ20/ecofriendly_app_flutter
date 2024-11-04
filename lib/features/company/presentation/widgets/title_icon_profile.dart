@@ -18,12 +18,12 @@ class TitleIconProfile extends StatelessWidget {
     return Row(
       children: [
         FaIcon(
-          FontAwesomeIcons.globe,
+          iconData,
           color: colors.primary,
         ),
         const SizedBox(width: 20),
         Text(
-          'Redes',
+          text,
           style: textTitle,
         ),
       ],

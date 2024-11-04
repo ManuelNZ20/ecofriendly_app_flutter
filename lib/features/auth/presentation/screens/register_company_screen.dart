@@ -73,6 +73,7 @@ class CompanyForm extends ConsumerWidget {
         Theme.of(context).textTheme.bodyMedium!.copyWith(
               color: MyColors.password,
             );
+    final colors = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.symmetric(
         vertical: 8.0,
@@ -82,12 +83,12 @@ class CompanyForm extends ConsumerWidget {
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(
+          SizedBox(
             width: double.infinity,
             child: Icon(
               Icons.business_sharp,
               size: 60,
-              color: MyColors.mainColor,
+              color: colors.primary,
             ),
           ),
           Text(
@@ -171,7 +172,6 @@ class CompanyForm extends ConsumerWidget {
               Text(
                 '¿Ya tienes una cuenta?',
                 style: textChangedPassword.copyWith(
-                  color: Colors.black87,
                   fontWeight: FontWeight.w300,
                 ),
               ),

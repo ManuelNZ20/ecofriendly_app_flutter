@@ -26,6 +26,7 @@ class _BusinessOptionScreenState extends State<BusinessOptionScreen> {
           fontWeight: FontWeight.w300,
           color: Theme.of(context).colorScheme.primary,
         );
+    final colors = Theme.of(context).colorScheme;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -33,9 +34,9 @@ class _BusinessOptionScreenState extends State<BusinessOptionScreen> {
           child: Column(
             children: [
               const Spacer(flex: 1),
-              const Icon(
+              Icon(
                 Icons.eco_outlined,
-                color: MyColors.mainColor,
+                color: colors.primary,
                 size: 70,
               ),
               const SizedBox(height: 20),
@@ -52,7 +53,7 @@ class _BusinessOptionScreenState extends State<BusinessOptionScreen> {
                 secondary: Icon(
                   Icons.person,
                   color: selectedBusiness == BusinessOption.users
-                      ? MyColors.mainColor
+                      ? colors.primary
                       : null,
                 ),
                 onChanged: (value) => setState(
@@ -67,7 +68,7 @@ class _BusinessOptionScreenState extends State<BusinessOptionScreen> {
                 secondary: Icon(
                   Icons.business_outlined,
                   color: selectedBusiness == BusinessOption.ecofrinedly
-                      ? MyColors.mainColor
+                      ? colors.primary
                       : null,
                 ),
                 subtitle:

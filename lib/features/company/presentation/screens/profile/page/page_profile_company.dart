@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import 'package:ecofriendly_app/core/shared/shared.dart';
 import 'package:ecofriendly_app/core/utils/functions/launch_url.dart';
 import '../../../providers/company_app_provider.riverpod.dart';
@@ -53,9 +52,9 @@ class PageProfileCompany extends ConsumerWidget {
                     imgBanner: companyRes.company!.bannerCompany!,
                     imgPresentation: companyRes.company!.imgPresentation!,
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 10),
                   const TitleIconProfile(text: 'Acerca de nosotros'),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 10),
                   SizedBox(
                     width: size.width * .9,
                     height: 120,
@@ -69,34 +68,36 @@ class PageProfileCompany extends ConsumerWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 10),
                   Text(
                     'R.U.C',
                     style: textTitle,
                   ),
+                  const SizedBox(height: 8),
                   Text(
                     companyRes.company!.ruc!,
                     style: textInfo,
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 12),
                   const TitleIconProfile(
                     text: 'Ubicación',
                     iconData: FontAwesomeIcons.mapLocationDot,
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 12),
                   Text(companyRes.company!.address!),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 10),
                   Text(companyRes.company!.location!),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 10),
                   const TitleIconProfile(
                     text: 'Redes',
                     iconData: FontAwesomeIcons.globe,
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       IconButton.outlined(
+                        color: colors.primary,
                         onPressed: () {
                           launchUrlOpenApp(
                             Uri.parse('mailto:${companyRes.company!.email}'),
@@ -108,6 +109,7 @@ class PageProfileCompany extends ConsumerWidget {
                         ),
                       ),
                       IconButton.outlined(
+                        color: colors.primary,
                         onPressed: () {
                           launchUrlOpenApp(
                             Uri.parse('tel:+51${companyRes.company!.phone}'),
