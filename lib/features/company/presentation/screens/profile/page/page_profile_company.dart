@@ -1,11 +1,9 @@
-import 'package:ecofriendly_app/config/theme/styles/styles.dart';
-import 'package:ecofriendly_app/core/utils/functions/launch_url.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:ecofriendly_app/core/shared/shared.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:ecofriendly_app/core/utils/functions/launch_url.dart';
 import '../../../providers/company_app_provider.riverpod.dart';
 import '../../../widgets/widgets.dart';
 
@@ -26,9 +24,7 @@ class PageProfileCompany extends ConsumerWidget {
     final textMessage = Theme.of(context).textTheme.bodySmall!.copyWith(
           color: Colors.grey.shade600,
         );
-    final textInfo = Theme.of(context).textTheme.bodyLarge!.copyWith(
-        // color: Colors.grey.shade600,
-        );
+    final textInfo = Theme.of(context).textTheme.bodyLarge!.copyWith();
     final textTitle = Theme.of(context).textTheme.titleMedium!.copyWith(
           color: colors.primary,
         );
@@ -54,8 +50,8 @@ class PageProfileCompany extends ConsumerWidget {
                   ),
                   const SizedBox(height: 10),
                   _PresentationCompany(
-                    size: size,
-                    companyRes: companyRes,
+                    imgBanner: companyRes.company!.bannerCompany!,
+                    imgPresentation: companyRes.company!.imgPresentation!,
                   ),
                   const SizedBox(height: 6),
                   const TitleIconProfile(text: 'Acerca de nosotros'),
@@ -133,22 +129,22 @@ class PageProfileCompany extends ConsumerWidget {
 
 class _PresentationCompany extends StatelessWidget {
   const _PresentationCompany({
-    super.key,
-    required this.size,
-    required this.companyRes,
+    required this.imgBanner,
+    required this.imgPresentation,
   });
 
-  final Size size;
-  final CompanyState companyRes;
+  final String imgBanner;
+  final String imgPresentation;
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     const double radius = 40;
 
     return SizedBox(
       width: size.width,
       height: 140,
-      child: companyRes.company!.bannerCompany!.isEmpty
+      child: imgBanner.isEmpty
           ? Container(
               color: Colors.grey.shade300,
               child: const Text('Not banner'),
@@ -161,18 +157,18 @@ class _PresentationCompany extends StatelessWidget {
               child: Stack(
                 children: [
                   Image.network(
-                    companyRes.company!.bannerCompany!,
+                    imgBanner,
                     width: size.width,
                     fit: BoxFit.cover,
                   ),
                   Positioned(
                     left: 8,
                     bottom: 8,
-                    child: companyRes.company!.imgPresentation!.isNotEmpty
+                    child: imgPresentation.isNotEmpty
                         ? CircleAvatar(
                             radius: radius,
                             backgroundImage: NetworkImage(
-                              companyRes.company!.imgPresentation!,
+                              imgPresentation,
                             ),
                           )
                         : const CircleAvatar(
