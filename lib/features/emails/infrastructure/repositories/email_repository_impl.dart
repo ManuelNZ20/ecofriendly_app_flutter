@@ -12,4 +12,14 @@ class EmailRepositoryImpl implements EmailRepositories {
       token: token ?? '',
     );
   }
+
+  @override
+  Future<void> openGmail(
+      {required String email, required String? subject, String? body}) async {
+    await openGmail(
+      email: email,
+      subject: subject,
+      body: body,
+    );
+  }
 }

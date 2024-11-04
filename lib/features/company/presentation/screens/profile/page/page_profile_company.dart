@@ -1,9 +1,13 @@
-import 'package:ecofriendly_app/config/theme/theme.dart';
+import 'package:ecofriendly_app/config/theme/styles/styles.dart';
+import 'package:ecofriendly_app/core/utils/functions/launch_url.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:ecofriendly_app/core/shared/shared.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../providers/company_app_provider.riverpod.dart';
+import '../../../widgets/widgets.dart';
 
 class PageProfileCompany extends ConsumerWidget {
   static const String name = 'page_profile_company';
@@ -25,7 +29,9 @@ class PageProfileCompany extends ConsumerWidget {
     final textInfo = Theme.of(context).textTheme.bodyLarge!.copyWith(
         // color: Colors.grey.shade600,
         );
-    const double radius = 40;
+    final textTitle = Theme.of(context).textTheme.titleMedium!.copyWith(
+          color: colors.primary,
+        );
     return Scaffold(
       appBar: AppBar(
         leading: const IconButtonArrowBack(),
@@ -44,103 +50,137 @@ class PageProfileCompany extends ConsumerWidget {
                   ),
                   Text(
                     companyRes.company!.nameCompany,
-                    style: textInfo,
+                    style: textTitle,
                   ),
                   const SizedBox(height: 10),
+                  _PresentationCompany(
+                    size: size,
+                    companyRes: companyRes,
+                  ),
+                  const SizedBox(height: 6),
+                  const TitleIconProfile(text: 'Acerca de nosotros'),
+                  const SizedBox(height: 6),
                   SizedBox(
-                    width: size.width,
-                    height: 140,
-                    child: companyRes.company!.bannerCompany!.isEmpty
-                        ? Container(
-                            color: Colors.grey.shade300,
-                            child: const Text('Not banner'),
-                          )
-                        : Container(
-                            clipBehavior: Clip.hardEdge,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Stack(
-                              children: [
-                                Image.network(
-                                  companyRes.company!.bannerCompany!,
-                                  width: size.width,
-                                  fit: BoxFit.cover,
-                                ),
-                                Positioned(
-                                  left: 8,
-                                  bottom: 8,
-                                  child: companyRes
-                                          .company!.imgPresentation!.isNotEmpty
-                                      ? CircleAvatar(
-                                          radius: radius,
-                                          backgroundImage: NetworkImage(
-                                            companyRes
-                                                .company!.imgPresentation!,
-                                          ),
-                                        )
-                                      : const CircleAvatar(
-                                          radius: radius,
-                                          backgroundImage: AssetImage(
-                                              'assets/images/image-not-found.png'),
-                                        ),
-                                ),
-                              ],
-                            ),
-                          ),
-                  ),
-                  const SizedBox(height: 10),
-                  Container(
-                    width: size.width,
-                    height: 220,
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: colors.surfaceContainer,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: listShadowCard,
-                    ),
-                    child: Column(
+                    width: size.width * .9,
+                    height: 120,
+                    child: ListView(
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: size.width,
-                              child: Text(
-                                companyRes.company!.email,
-                                softWrap: true,
-                                style: textInfo,
-                              ),
-                            ),
-                            Text(
-                              companyRes.company!.ruc!,
-                              style: textInfo,
-                            ),
-                          ],
+                        Text(
+                          companyRes.company!.description!,
+                          softWrap: true,
+                          style: textInfo,
                         ),
                       ],
                     ),
                   ),
-
-                  Positioned(
-                    left: 15,
-                    top: 120,
-                    child: SizedBox(
-                      width: size.width * .9,
-                      height: 100,
-                      child: ListView(
-                        children: [
-                          Text(
-                            companyRes.company!.description!,
-                            softWrap: true,
-                            style: textInfo,
-                          ),
-                        ],
-                      ),
-                    ),
+                  const SizedBox(height: 6),
+                  Text(
+                    'R.U.C',
+                    style: textTitle,
                   ),
+                  Text(
+                    companyRes.company!.ruc!,
+                    style: textInfo,
+                  ),
+                  const SizedBox(height: 6),
+                  const TitleIconProfile(
+                    text: 'Ubicación',
+                    iconData: FontAwesomeIcons.mapLocationDot,
+                  ),
+                  const SizedBox(height: 6),
+                  Text(companyRes.company!.address!),
+                  const SizedBox(height: 6),
+                  Text(companyRes.company!.location!),
+                  const SizedBox(height: 6),
+                  const TitleIconProfile(
+                    text: 'Redes',
+                    iconData: FontAwesomeIcons.globe,
+                  ),
+                  const SizedBox(height: 6),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton.outlined(
+                        onPressed: () {
+                          launchUrlOpenApp(
+                            Uri.parse('mailto:${companyRes.company!.email}'),
+                            false,
+                          );
+                        },
+                        icon: const FaIcon(
+                          FontAwesomeIcons.envelope,
+                        ),
+                      ),
+                      IconButton.outlined(
+                        onPressed: () {
+                          launchUrlOpenApp(
+                            Uri.parse('tel:+51${companyRes.company!.phone}'),
+                            false,
+                          );
+                        },
+                        icon: const FaIcon(
+                          FontAwesomeIcons.phone,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+    );
+  }
+}
 
-                  // Text(companyRes.company!.nameCompany),
+class _PresentationCompany extends StatelessWidget {
+  const _PresentationCompany({
+    super.key,
+    required this.size,
+    required this.companyRes,
+  });
+
+  final Size size;
+  final CompanyState companyRes;
+
+  @override
+  Widget build(BuildContext context) {
+    const double radius = 40;
+
+    return SizedBox(
+      width: size.width,
+      height: 140,
+      child: companyRes.company!.bannerCompany!.isEmpty
+          ? Container(
+              color: Colors.grey.shade300,
+              child: const Text('Not banner'),
+            )
+          : Container(
+              clipBehavior: Clip.hardEdge,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Stack(
+                children: [
+                  Image.network(
+                    companyRes.company!.bannerCompany!,
+                    width: size.width,
+                    fit: BoxFit.cover,
+                  ),
+                  Positioned(
+                    left: 8,
+                    bottom: 8,
+                    child: companyRes.company!.imgPresentation!.isNotEmpty
+                        ? CircleAvatar(
+                            radius: radius,
+                            backgroundImage: NetworkImage(
+                              companyRes.company!.imgPresentation!,
+                            ),
+                          )
+                        : const CircleAvatar(
+                            radius: radius,
+                            backgroundImage:
+                                AssetImage('assets/images/image-not-found.png'),
+                          ),
+                  ),
                 ],
               ),
             ),

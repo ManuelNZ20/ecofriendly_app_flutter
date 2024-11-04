@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:ecofriendly_app/core/core.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../auth/infrastructure/infrastructure.dart';
 import '../../domain/domain.dart';
@@ -33,6 +34,28 @@ class EmailDatasourceImpl implements EmailDatasources {
     } on EmailErrors catch (e) {
       throw EmailErrors(
           'No se logro enviar el correo electronico ${e.toString()}');
+    }
+  }
+
+  @override
+  Future<void> openGmail(
+      {required String email, required String? subject, String? body}) async {
+    final Uri emailUri = Uri(
+      scheme: 'mailto',
+      path: email,
+      query:
+          'subject=${Uri.encodeComponent(subject ?? '')}&body=${Uri.encodeComponent(body ?? '')}',
+    );
+    try {
+      print(emailUri.toString());
+      // Verificamos si se puede abrir la URL
+      if (await canLaunchUrl(emailUri)) {
+        await launchUrl(emailUri);
+      } else {
+        print('No se puede abrir el email en este dispositivo');
+      }
+    } catch (e) {
+      print('Error al lanzar URL del email: $e');
     }
   }
 }
