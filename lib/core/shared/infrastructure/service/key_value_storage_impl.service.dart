@@ -13,6 +13,8 @@ class KeyValueStorageImpl extends KeyValueStorageService {
       return prefs.getInt(key) as T?;
     } else if (T == String) {
       return prefs.getString(key) as T?;
+    } else if (T == bool) {
+      return prefs.getBool(key) as T?;
     } else {
       throw UnimplementedError('GET not implemented for type $T');
     }
@@ -31,6 +33,8 @@ class KeyValueStorageImpl extends KeyValueStorageService {
       prefs.setInt(key, value as int);
     } else if (T == String) {
       prefs.setString(key, value as String);
+    } else if (T == bool) {
+      prefs.setBool(key, value as bool);
     } else {
       throw UnimplementedError('Set not implemented for type $T');
     }

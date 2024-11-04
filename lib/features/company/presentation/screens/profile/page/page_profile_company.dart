@@ -30,7 +30,7 @@ class PageProfileCompany extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         leading: const IconButtonArrowBack(),
-        title: const Text('Perfil general'),
+        title: const Text('Ecofriendly'),
       ),
       body: companyRes.isLoading
           ? const FullScreenLoader()

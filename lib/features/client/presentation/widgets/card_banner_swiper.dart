@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class BannerCardSwiper extends StatelessWidget {
   const BannerCardSwiper({
@@ -87,7 +88,9 @@ class BannerCardSwiper extends StatelessWidget {
                 bottom: 10,
                 right: 8,
                 child: IconButton(
-                  onPressed: () {},
+                  onPressed: location == null || location!.isEmpty
+                      ? null
+                      : () => context.push(location!),
                   icon: const Icon(
                     Icons.business,
                     color: Colors.white,

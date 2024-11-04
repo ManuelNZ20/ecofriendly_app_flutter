@@ -57,6 +57,7 @@ class CustomSlideShow extends ConsumerWidget {
                 subTitle: banner.subTitle,
                 titleLink: banner.titleLink,
                 isActive: banner.isActive,
+                location: banner.linkScreen,
               );
             },
           );

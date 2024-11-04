@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../../../core/shared/infrastructure/infrastructure.dart';
 import '../../../../../core/shared/shared.dart';
 import '../../../domain/domain.dart';
 import '../../providers/banner_provider.dart';
@@ -74,7 +72,6 @@ class BannerCompanyScreen extends ConsumerWidget {
                 .onFormSubmit()
                 .then(
               (value) {
-                print(value);
                 if (!value) return;
                 showSnackbar(context);
               },

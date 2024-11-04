@@ -4,6 +4,7 @@ import '../../core/shared/infrastructure/infrastructure.dart';
 import '../../features/auth/presentation/screens/screens.dart';
 import '../../features/company/presentation/screens/screens.dart';
 import '../../features/client/presentation/screens/screens.dart';
+import '../../features/onboarding/presentation/screens.dart';
 import 'app_router_notifier.dart';
 import '../../features/auth/presentation/riverpod/providers.dart';
 
@@ -16,8 +17,17 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       // Splash
       GoRoute(
         path: '/splash',
+        name: CheckAuthStatusScreen.name,
         builder: (context, state) {
           return const CheckAuthStatusScreen();
+        },
+      ),
+      // OnBoarding
+      GoRoute(
+        path: '/onboarding',
+        name: OnboardingScreen.name,
+        builder: (context, state) {
+          return const OnboardingScreen();
         },
       ),
       // Auth Routes
@@ -168,15 +178,24 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     redirect: (context, state) async {
       final isGoingTo = state.matchedLocation;
       final authStatus = goRouterNotifier.authStatus;
+      final keyValueStorageService = KeyValueStorageImpl();
+
+      print('$isGoingTo $authStatus');
       if (isGoingTo == '/splash' && authStatus == AuthStatus.checking) {
         return null;
       }
-
       if (authStatus == AuthStatus.noAuthenticated) {
         if (isGoingTo == '/login' ||
             isGoingTo == '/business_option' ||
             isGoingTo == '/register_user' ||
-            isGoingTo == '/register_company') return null;
+            isGoingTo == '/register_company' ||
+            isGoingTo == '/onboarding') return null;
+        final isOnBoarding = await keyValueStorageService
+                .getValue<bool>('onboarding_completed') ??
+            false;
+        if (!isOnBoarding) {
+          return '/onboarding';
+        }
         return '/login';
       }
       if (authStatus == AuthStatus.authenticated) {

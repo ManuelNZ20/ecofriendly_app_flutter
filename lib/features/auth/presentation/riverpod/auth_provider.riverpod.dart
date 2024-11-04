@@ -31,15 +31,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
     await Future.delayed(const Duration(milliseconds: 500));
     try {
       final userLogin = await authRepository.login(email, password);
-      print(userLogin.idTypeUser);
+      // print(userLogin.idTypeUser);
       if (userLogin.idTypeUser == 1) {
-        print(userLogin.idTypeUser);
+        // print(userLogin.idTypeUser);
         final user = await authRepository.getDataUser(userLogin.id);
         _setLoggedUser(user);
         return;
       }
       if (userLogin.idTypeUser == 3) {
-        print(userLogin.idTypeUser);
+        // print(userLogin.idTypeUser);
         final company = await authRepository.getDataCompany(userLogin.id);
         _setLoggedCompany(company);
         return;
@@ -186,8 +186,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
     final typeUser = await keyValueStorageService.getValue<int>('type_user');
     final id = await keyValueStorageService.getValue<String>('id');
     if (token != null || typeUser != null || id != null) {
-      print(
-          'Error: el token o el tipo de usuario aún persisten después de logout');
+      // print(
+      //     'Error: el token o el tipo de usuario aún persisten después de logout');
     }
     state = state.copyWith(
       authStatus: AuthStatus.noAuthenticated,

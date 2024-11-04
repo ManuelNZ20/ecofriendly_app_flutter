@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../../core/shared/shared.dart';
 import '../../../domain/domain.dart';
 import '../banners_provider.riverpod.dart';
 
@@ -77,6 +78,10 @@ class BannerFormNotifier extends StateNotifier<BannerFormState> {
     if (!state.isFormValid) return false;
     if (onSubmitCallback == null) return false;
     try {
+      final keyValueStorageService = KeyValueStorageImpl();
+      final id = await keyValueStorageService.getValue<String>('id');
+      final linkScreen = '/home_company/profile/$id/page_company/$id';
+      // /home_company/profile/572a0580-a492-411e-97bb-0465cccdf422/page_company/572a0580-a492-411e-97bb-0465cccdf422
       return await onSubmitCallback!(
         state.id ?? '',
         state.title,
@@ -84,7 +89,7 @@ class BannerFormNotifier extends StateNotifier<BannerFormState> {
         state.titleButton,
         state.isActive,
         state.imgUrl,
-        state.linkScreen ?? '',
+        linkScreen,
       );
     } catch (e) {
       return false;
