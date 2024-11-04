@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:card_swiper/card_swiper.dart';
 
 import '../riverpod/banners_provider.dart';
+import '../riverpod/products_provider.dart';
 import 'widgets.dart';
 
 class CustomSlideShow extends ConsumerWidget {
@@ -25,8 +26,21 @@ class CustomSlideShow extends ConsumerWidget {
             );
           }
           if (snapshot.hasError) {
-            return const Center(
-              child: Text('Error'),
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('Su conexión a fallado'),
+                  TextButton.icon(
+                    onPressed: () async {
+                      ref.invalidate(productsProvider);
+                      ref.invalidate(bannersProvider);
+                    },
+                    icon: const Icon(Icons.replay_outlined),
+                    label: const Text('Intentar otra vez'),
+                  ),
+                ],
+              ),
             );
           }
           final banners = snapshot.data;
@@ -37,7 +51,6 @@ class CustomSlideShow extends ConsumerWidget {
             autoplay: true,
             itemBuilder: (context, index) {
               final banner = banners[index];
-              // return _Slide(banner: banner);
               return BannerCardSwiper(
                 imgUrl: banner.imgUrl,
                 title: banner.title,

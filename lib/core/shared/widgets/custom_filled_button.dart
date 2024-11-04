@@ -1,4 +1,3 @@
-import 'package:ecofriendly_app/config/theme/styles/colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomFilledButton extends StatelessWidget {
