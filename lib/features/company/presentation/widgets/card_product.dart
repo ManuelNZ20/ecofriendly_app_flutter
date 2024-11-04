@@ -134,6 +134,15 @@ class _ImageProduct extends StatelessWidget {
             height: size.height * .15,
             img,
             fit: BoxFit.contain,
+            errorBuilder: (context, error, stackTrace) {
+              return SizedBox(
+                width: size.width * .4,
+                height: size.height * .15,
+                child: const Center(
+                  child: Text('Failed'),
+                ),
+              );
+            },
             loadingBuilder: (context, child, loadingProgress) {
               if (loadingProgress != null) {
                 return SizedBox(

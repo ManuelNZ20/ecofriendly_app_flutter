@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ecofriendly_app/config/theme/styles/colors.dart';
 import 'package:ecofriendly_app/core/shared/shared.dart';
 
 enum BusinessOption { users, ecofrinedly }

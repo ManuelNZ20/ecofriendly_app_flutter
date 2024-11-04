@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../config/router/app_router_notifier.dart';
 import '../../../client/presentation/riverpod/connectivity_app.riverpod.dart';
 import '../riverpod/providers.dart';
 import 'package:ecofriendly_app/core/shared/shared.dart';
-// import 'package:ecofriendly_app/config/theme/styles/colors.dart';
 import 'package:ecofriendly_app/core/utils/functions/show_snackbar.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -48,10 +48,12 @@ class LoginForm extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final colors = Theme.of(context).colorScheme;
     final loginForm = ref.watch(loginFormProvider);
     final titleLogin = Theme.of(context).textTheme.titleLarge!.copyWith(
           fontWeight: FontWeight.bold,
           fontSize: 24,
+          color: colors.primary,
         );
     final textChangedPassword =
         Theme.of(context).textTheme.bodyMedium!.copyWith(
@@ -65,7 +67,6 @@ class LoginForm extends ConsumerWidget {
         showSnackbar(context, next.messageRegister);
       }
     });
-    final colors = Theme.of(context).colorScheme;
 
     final connectionStatus = ref.watch(connectionStatusProvider);
     return connectionStatus.when(
@@ -169,7 +170,7 @@ class LoginForm extends ConsumerWidget {
       },
       loading: () {
         return const Center(
-          child: CircularProgressContainer(),
+          child: _ReloadConnectivity(),
         );
       },
     );
@@ -177,9 +178,7 @@ class LoginForm extends ConsumerWidget {
 }
 
 class _ReloadConnectivity extends ConsumerWidget {
-  const _ReloadConnectivity({
-    super.key,
-  });
+  const _ReloadConnectivity();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -189,7 +188,10 @@ class _ReloadConnectivity extends ConsumerWidget {
         const Text('Su conexión a fallado'),
         TextButton.icon(
           onPressed: () async {
+            ref.invalidate(goRouterNotifierProvider);
             ref.invalidate(authProvider);
+            // ref.invalidate(authProvider);
+            print('ninsaf');
           },
           icon: const Icon(Icons.replay_outlined),
           label: const Text('Intentar otra vez'),

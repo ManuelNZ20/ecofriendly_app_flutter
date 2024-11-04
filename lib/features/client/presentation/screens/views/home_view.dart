@@ -17,6 +17,7 @@ class HomeView extends ConsumerWidget {
     final colors = Theme.of(context).colorScheme;
     final isDark = ref.watch(appThemeProvider);
     final listColors = ref.watch(listColorsProvider);
+    final productStream = ref.watch(productsLoadingProvider);
     return RefreshIndicator(
       onRefresh: () async {
         ref.invalidate(productsProvider);

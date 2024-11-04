@@ -1,12 +1,34 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../domain/entities/product_client.dart';
 import '../../domain/repositories/product_client_repository.dart';
+import '../../infrastructure/mappers/mappers.dart';
+import '../../infrastructure/model/model.dart';
 import 'repository/product_repository_provider.dart';
 
 final productsProvider =
     StateNotifierProvider<ProductsNotifier, ProductsState>((ref) {
   final productRepository = ref.watch(productRepositoryProvider);
   return ProductsNotifier(productRepository: productRepository);
+});
+
+final productsLoadingProvider =
+    StreamProvider<List<ProductClient>>((ref) async* {
+  final supabase = Supabase.instance.client;
+  final response = supabase.from('product').select('''
+        *,
+        productdiscount(*)
+        ''').asStream();
+  await for (var p in response) {
+    final data = p;
+    yield data
+        .map(
+          (product) => ProductClientMapper.toProductEntity(
+            ProductClientModel.fromJson(product),
+          ),
+        )
+        .toList();
+  }
 });
 
 class ProductsNotifier extends StateNotifier<ProductsState> {

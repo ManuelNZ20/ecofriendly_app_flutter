@@ -19,14 +19,18 @@ class BannerCardSwiper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final titleTheme = Theme.of(context)
-        .textTheme
-        .titleMedium
-        ?.copyWith(overflow: TextOverflow.clip);
+    final titleTheme = Theme.of(context).textTheme.titleMedium?.copyWith(
+          overflow: TextOverflow.clip,
+          fontWeight: FontWeight.w700,
+          color: Colors.black,
+          backgroundColor: Colors.white,
+        );
     final subTitleTheme = Theme.of(context).textTheme.titleMedium?.copyWith(
           overflow: TextOverflow.clip,
           fontSize: 12,
           fontWeight: FontWeight.w400,
+          color: Colors.black,
+          backgroundColor: Colors.white.withOpacity(.5),
         );
     // Measure title height
     final textPainter = TextPainter(
@@ -44,11 +48,12 @@ class BannerCardSwiper extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: 12),
         child: Card(
           elevation: 6,
+          clipBehavior: Clip.hardEdge,
           child: Stack(
             children: [
               // image
               Positioned(
-                right: 0,
+                // right: 10,
                 child: _ImageGallery(imgUrl: imgUrl),
               ),
               // title
@@ -66,28 +71,26 @@ class BannerCardSwiper extends StatelessWidget {
               ),
               // subTitle
               Positioned(
-                top: 10 + heightTitle,
+                top: 10 + heightTitle + 5,
                 left: 10,
                 child: SizedBox(
-                  width: size.width * .55,
+                  width: size.width * .7,
                   child: Text(
                     subTitle,
                     style: subTitleTheme,
+                    textAlign: TextAlign.justify,
                   ),
                 ),
               ),
               // button
               Positioned(
                 bottom: 10,
-                left: 8,
-                child: FilledButton(
+                right: 8,
+                child: IconButton(
                   onPressed: () {},
-                  child: Text(
-                    titleLink,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.onPrimary,
-                          fontSize: 14,
-                        ),
+                  icon: const Icon(
+                    Icons.business,
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -110,8 +113,9 @@ class _ImageGallery extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Image.network(
-      width: size.width * .4,
+      width: size.width,
       height: size.height * .3,
+      fit: BoxFit.cover,
       imgUrl == ''
           ? 'https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png'
           : imgUrl,

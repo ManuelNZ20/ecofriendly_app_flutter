@@ -55,7 +55,15 @@ class ProductDetailScreen extends ConsumerWidget {
           children: [
             Center(
               child: Image.network(product.img, width: 200, height: 200,
-                  loadingBuilder: (context, child, loadingProgress) {
+                  errorBuilder: (context, error, stackTrace) {
+                return const SizedBox(
+                  width: 200,
+                  height: 200,
+                  child: Center(
+                    child: Text('Failed'),
+                  ),
+                );
+              }, loadingBuilder: (context, child, loadingProgress) {
                 if (loadingProgress == null) {
                   return child;
                 } else {

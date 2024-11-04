@@ -8,14 +8,12 @@ final connectionStatusProvider = StreamProvider<ConnectionStatus>((ref) async* {
   await for (List<ConnectivityResult> result
       in Connectivity().onConnectivityChanged) {
     bool hasInternet = await InternetConnectionChecker().hasConnection;
-    result.map(
-      (e) async* {
-        if (e == ConnectivityResult.none || !hasInternet) {
-          yield ConnectionStatus.disconnected;
-        } else {
-          yield ConnectionStatus.connected;
-        }
-      },
-    );
+
+    // Emite el estado de conexión basado en el resultado
+    if (result == ConnectivityResult.none || !hasInternet) {
+      yield ConnectionStatus.disconnected;
+    } else {
+      yield ConnectionStatus.connected;
+    }
   }
 });
