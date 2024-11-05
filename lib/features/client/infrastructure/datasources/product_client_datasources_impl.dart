@@ -58,6 +58,7 @@ class ProductClientDatasourceImpl implements ProductClientDatasource {
         *,
         productdiscount(*)
         ''');
+      print(response);
       final products = _responseProduct(response);
       return products;
     } catch (e) {

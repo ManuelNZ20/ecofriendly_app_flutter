@@ -1,6 +1,6 @@
 class ProductDiscountClientModel {
   final String idproductdiscount;
-  final String idproduct;
+  final int idproduct;
   final double discountPercentage;
   final DateTime createdAt;
 
@@ -14,7 +14,7 @@ class ProductDiscountClientModel {
   factory ProductDiscountClientModel.fromJson(Map<String, dynamic> json) =>
       ProductDiscountClientModel(
         idproductdiscount: json["idproductdiscount"],
-        idproduct: json["idproduct"],
+        idproduct: json["id_ext"],
         discountPercentage:
             double.parse(json["discount_percentage"].toString()),
         createdAt: DateTime.parse(json["created_at"]),
