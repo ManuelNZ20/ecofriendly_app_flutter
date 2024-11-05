@@ -61,7 +61,7 @@ class ProductsDiscountNotifier extends StateNotifier<ProductsDiscountState> {
 
   Future<bool> createdOrUpdateProductDiscount(
     String idproductdiscount,
-    String idproduct,
+    int idproduct,
     double percentage,
   ) async {
     try {

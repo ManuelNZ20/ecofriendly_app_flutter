@@ -11,7 +11,7 @@ class FormProductDiscount extends ConsumerWidget {
     super.key,
     required this.idProduct,
   });
-  final String idProduct;
+  final int idProduct;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -113,13 +113,13 @@ class _ProductDiscountFormView extends ConsumerWidget {
   }
 }
 
-ProductDiscount newEmptyProductDiscount(String idproduct) => ProductDiscount(
+ProductDiscount newEmptyProductDiscount(int idproduct) => ProductDiscount(
     idproductdiscount: 'new',
     idproduct: idproduct,
     discountpercentage: 0.0,
     createdAt: DateTime.now(),
     product: Product(
-      idProduct: idproduct,
+      id: idproduct,
       nameProduct: '',
       brand: '',
       description: '',

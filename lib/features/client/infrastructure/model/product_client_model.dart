@@ -3,6 +3,7 @@ import '../mappers/product_discount_client_mapper.dart';
 import 'product_discount_client_model.dart';
 
 class ProductClientModel {
+  final int id;
   final String idproduct;
   final String nameproduct;
   final String brand;
@@ -20,6 +21,7 @@ class ProductClientModel {
   final double discountpercentage; //discount_percentage
 
   ProductClientModel({
+    required this.id,
     required this.idproduct,
     required this.nameproduct,
     required this.brand,
@@ -55,6 +57,7 @@ class ProductClientModel {
     }
 
     return ProductClientModel(
+      id: json['id_ext'],
       idproduct: json["idproduct"],
       nameproduct: json["nameproduct"],
       brand: json["brand"],

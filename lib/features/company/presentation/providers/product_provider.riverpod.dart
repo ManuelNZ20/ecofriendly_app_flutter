@@ -3,7 +3,7 @@ import 'repository/product_repository_provider.riverpod.dart';
 import '../../domain/domain.dart';
 
 final productProvider = StateNotifierProvider.family
-    .autoDispose<ProductNotifier, ProductState, String>((ref, idProduct) {
+    .autoDispose<ProductNotifier, ProductState, int>((ref, idProduct) {
   final productRepository = ref.watch(productRepositoryProvider);
   return ProductNotifier(
     idProduct: idProduct,
@@ -14,14 +14,14 @@ final productProvider = StateNotifierProvider.family
 class ProductNotifier extends StateNotifier<ProductState> {
   final ProductRepository productRepository;
   ProductNotifier({
-    required String idProduct,
+    required int idProduct,
     required this.productRepository,
   }) : super(ProductState(id: idProduct)) {
     loadProduct();
   }
   Product newEmptyProduct() {
     return Product(
-      idProduct: 'new',
+      id: 0,
       nameProduct: '',
       brand: '',
       description: '',
@@ -38,7 +38,7 @@ class ProductNotifier extends StateNotifier<ProductState> {
 
   Future<void> loadProduct() async {
     try {
-      if (state.id == 'new') {
+      if (state.id == 0) {
         state = state.copyWith(
           isLoading: false,
           product: newEmptyProduct(),
@@ -58,7 +58,7 @@ class ProductNotifier extends StateNotifier<ProductState> {
 }
 
 class ProductState {
-  final String id;
+  final int id;
   final Product? product;
   final bool isLoading;
   final bool isSaving;
@@ -71,7 +71,7 @@ class ProductState {
   });
 
   ProductState copyWith({
-    String? id,
+    int? id,
     Product? product,
     bool? isLoading,
     bool? isSaving,

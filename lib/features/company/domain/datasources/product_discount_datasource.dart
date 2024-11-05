@@ -4,17 +4,17 @@ abstract class ProductDiscountDatasource {
   Future<List<ProductDiscount>> getProductsDiscount();
 
   Future<ProductDiscount?> getProductDiscountById({
-    String idproduct = '',
+    int idproduct = 0,
   });
 
   Future<ProductDiscount> createProductDiscount({
-    String idproduct,
+    int idproduct,
     double discountPercentage,
   });
 
   Future<ProductDiscount> updateProductDiscount({
     String idproductdiscount,
-    String idproduct,
+    int idproduct,
     double discountPercentage,
   });
   Stream<List<ProductDiscount>> getProductsStream();

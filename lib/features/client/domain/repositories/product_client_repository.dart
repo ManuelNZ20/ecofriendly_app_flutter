@@ -1,9 +1,9 @@
 import 'package:ecofriendly_app/features/client/domain/entities/entities.dart';
 
 abstract class ProductClientRepository {
-  Future<ProductClient> getProductById({String idProduct = ''});
+  Future<ProductClient> getProductById({int idProduct = 0});
 
-  Future<ProductClient?> getProductWithDiscountById({String idproduct = ''});
+  Future<ProductClient?> getProductWithDiscountById({int idproduct = 0});
 
   Future<List<ProductClient>> getProducts();
 

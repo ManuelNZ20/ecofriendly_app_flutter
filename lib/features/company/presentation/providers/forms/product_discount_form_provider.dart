@@ -19,7 +19,7 @@ class ProductDiscountFormNotifier
     extends StateNotifier<ProductDiscountFormState> {
   final Future<bool> Function(
     String idproductdiscount,
-    String idproduct,
+    int idproduct,
     double percentage,
   )? onSubmitCallback;
 
@@ -67,21 +67,21 @@ class ProductDiscountFormNotifier
 class ProductDiscountFormState {
   final bool isFormValid;
   final String? id;
-  final String idproduct;
+  final int idproduct;
   final double percentage;
   final double total;
 
   ProductDiscountFormState({
     this.isFormValid = false,
     this.id = '',
-    this.idproduct = '',
+    this.idproduct = 0,
     this.percentage = 0.0,
     this.total = 0.0,
   });
   ProductDiscountFormState copyWith({
     bool? isFormValid,
     String? id,
-    String? idproduct,
+    int? idproduct,
     double? percentage,
     double? total,
   }) =>

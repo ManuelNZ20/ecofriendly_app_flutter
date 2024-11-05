@@ -1,3 +1,4 @@
+import 'package:ecofriendly_app/features/client/domain/entities/entities.dart';
 import 'package:ecofriendly_app/features/client/presentation/riverpod/form/user_app_form_provider.riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,7 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../auth/domain/domain.dart';
 import '../../../auth/presentation/riverpod/providers.dart';
-import '../../../company/domain/domain.dart';
+// import '../../../company/domain/domain.dart';
 import '../delegates/search_product_delegate.dart';
 import '../riverpod/search/search_product_provider.dart';
 import '../riverpod/user_provider.dart';
@@ -37,7 +38,7 @@ class CustomAppBar extends ConsumerWidget {
                 onPressed: () {
                   final searchedProducts = ref.read(searchProductsProvider);
                   final searchQuery = ref.read(searchQueryProvider);
-                  showSearch<Product?>(
+                  showSearch<ProductClient?>(
                     context: context,
                     query: searchQuery,
                     delegate: SearchProductDelegate(
@@ -48,7 +49,7 @@ class CustomAppBar extends ConsumerWidget {
                     ),
                   ).then((product) {
                     if (product == null) return;
-                    context.push('/home/0/product/${product.idProduct}');
+                    context.push('/home/0/product/${product.id}');
                   });
                 },
                 icon: const Icon(Icons.search),

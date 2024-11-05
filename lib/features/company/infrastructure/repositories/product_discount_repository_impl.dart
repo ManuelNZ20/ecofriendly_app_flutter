@@ -20,7 +20,7 @@ class ProductDiscountRepositoryImpl extends ProductDiscountRepository {
 
   @override
   Future<ProductDiscount> createProductDiscount({
-    String idproduct = '',
+    int idproduct = 0,
     double discountPercentage = 0.0,
   }) async {
     try {
@@ -35,8 +35,7 @@ class ProductDiscountRepositoryImpl extends ProductDiscountRepository {
 
   @override
   @override
-  Future<ProductDiscount?> getProductDiscountById(
-      {String idproduct = ''}) async {
+  Future<ProductDiscount?> getProductDiscountById({int idproduct = 0}) async {
     try {
       final productdiscount = await productDiscountDatasource
           .getProductDiscountById(idproduct: idproduct);
@@ -49,7 +48,7 @@ class ProductDiscountRepositoryImpl extends ProductDiscountRepository {
   @override
   Future<ProductDiscount> updateProductDiscount({
     String idproductdiscount = '',
-    String idproduct = '',
+    int idproduct = 0,
     double discountPercentage = .0,
   }) async {
     try {

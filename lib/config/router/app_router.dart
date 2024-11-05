@@ -96,7 +96,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             builder: (context, state) {
               final idProduct = state.pathParameters['idProduct'];
               return ProductDetailScreen(
-                productId: idProduct!,
+                productId: int.parse(idProduct!),
               );
             },
           ),
@@ -137,7 +137,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             builder: (context, state) {
               final id = state.pathParameters['id_product'] ?? 'no-id';
               return ProductCompanyScreen(
-                idProduct: id,
+                idProduct: int.parse(id),
               );
             },
           ),

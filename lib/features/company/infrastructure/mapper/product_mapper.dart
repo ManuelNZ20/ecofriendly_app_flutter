@@ -3,7 +3,7 @@ import '../models/product.module.dart';
 
 class ProductMapper {
   static Product toProductEntity(ProductModel product) => Product(
-        idProduct: product.idproduct,
+        id: product.idproduct,
         nameProduct: product.nameproduct,
         brand: product.brand,
         description: product.description,

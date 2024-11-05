@@ -13,19 +13,19 @@ class ProductClientDatasourceImpl implements ProductClientDatasource {
 
   @override
   Stream<List<ProductClient>> getProductsStream() {
-    final response =
-        supabaseClient.from(nameTable).stream(primaryKey: ['idproduct']);
+    final response = supabaseClient.from(nameTable).stream(primaryKey: ['id']);
     final products = response.map((event) => _responseProduct(event));
     return products;
   }
 
+  // TODO: MEJORAR LAS PETICIONES CON IDPRODUCT
   @override
-  Future<ProductClient> getProductById({String idProduct = ''}) async {
+  Future<ProductClient> getProductById({int idProduct = 0}) async {
     try {
       final response = await supabaseClient.from(nameTable).select('''
         *,
         productdiscount(*)
-        ''').eq('idproduct', idProduct);
+        ''').eq('id', idProduct);
       final product = _responseProduct(response).first;
       return product;
     } on AuthException catch (e) {
@@ -77,8 +77,7 @@ class ProductClientDatasourceImpl implements ProductClientDatasource {
   }
 
   @override
-  Future<ProductClient?> getProductWithDiscountById(
-      {String idproduct = ''}) async {
+  Future<ProductClient?> getProductWithDiscountById({int idproduct = 0}) async {
     try {
       final response = await supabaseClient
           .from('productdiscount')

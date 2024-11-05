@@ -37,7 +37,7 @@ class GridViewProductsAll extends StatelessWidget {
           priceDiscountApplied: product.price,
           img: product.img,
           isPromocion: false,
-          location: '/home_company/product/${product.idProduct}',
+          location: '/home_company/product/${product.id}',
         );
       },
     );

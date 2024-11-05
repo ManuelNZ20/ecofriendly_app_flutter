@@ -1,16 +1,16 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-import '../../../company/domain/domain.dart';
+import '../../domain/entities/entities.dart';
 import '../widgets/widgets.dart';
 
-typedef SearchProductsCallback = Future<List<Product>> Function(
+typedef SearchProductsCallback = Future<List<ProductClient>> Function(
     String textSearch);
 
-class SearchProductDelegate extends SearchDelegate<Product?> {
+class SearchProductDelegate extends SearchDelegate<ProductClient?> {
   final SearchProductsCallback searchProductsCallback;
-  List<Product> initialProducts;
-  StreamController<List<Product>> debouncedProduct =
+  List<ProductClient> initialProducts;
+  StreamController<List<ProductClient>> debouncedProduct =
       StreamController.broadcast();
   Timer? _debounceTimer;
   SearchProductDelegate({

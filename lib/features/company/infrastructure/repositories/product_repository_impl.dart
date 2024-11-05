@@ -55,7 +55,7 @@ class ProductRepositoryImpl implements ProductRepository {
 
   @override
   Future<Product> updateProduct({
-    String idProduct = '',
+    int idProduct = 0,
     String nameProduct = '',
     String brand = '',
     String description = '',
@@ -87,7 +87,7 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<Product> getProductById({String idProduct = ''}) async {
+  Future<Product> getProductById({int idProduct = 0}) async {
     final product =
         await productDataSource.getProductById(idProduct: idProduct);
     return product;
@@ -105,7 +105,7 @@ class ProductRepositoryImpl implements ProductRepository {
 
   @override
   Future<Product> updateProductCheck({
-    required String idProduct,
+    required int idProduct,
     required String nameProduct,
     required String brand,
     required String description,
@@ -136,7 +136,7 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<Product?> getProductWithDiscountById({String idproduct = ''}) async {
+  Future<Product?> getProductWithDiscountById({int idproduct = 0}) async {
     try {
       final product = await productDataSource.getProductWithDiscountById(
           idproduct: idproduct);

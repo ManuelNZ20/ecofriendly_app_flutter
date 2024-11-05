@@ -2,7 +2,7 @@ import 'product.dart';
 
 class ProductDiscount {
   final String idproductdiscount;
-  final String idproduct;
+  final int idproduct;
   final double discountpercentage; //discount_percentage
   final DateTime createdAt; //created_at
   final Product product;

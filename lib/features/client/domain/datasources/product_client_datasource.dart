@@ -1,9 +1,9 @@
 import '../entities/entities.dart';
 
 abstract class ProductClientDatasource {
-  Future<ProductClient> getProductById({String idProduct = ''});
+  Future<ProductClient> getProductById({int idProduct = 0});
 
-  Future<ProductClient?> getProductWithDiscountById({String idproduct = ''});
+  Future<ProductClient?> getProductWithDiscountById({int idproduct = 0});
 
   Future<List<ProductClient>> getProducts();
 

@@ -60,7 +60,7 @@ class HomeCompanyScreen extends ConsumerWidget {
         body: const _ContainerTabs(),
         floatingActionButton: tabIndex == 0
             ? FloatingActionButton.extended(
-                onPressed: () => context.push('/home_company/product/new'),
+                onPressed: () => context.push('/home_company/product/0'),
                 label: const Text('Producto'),
                 icon: const Icon(Icons.add),
               )

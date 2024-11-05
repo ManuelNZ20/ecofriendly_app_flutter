@@ -26,10 +26,10 @@ class GridViewProductsClientAllFavorite extends ConsumerWidget {
             itemBuilder: (context, index) {
               final product = products[index];
               return CardProductFavorite(
-                id: product.idProduct,
+                id: product.id,
                 name: product.nameProduct,
                 img: product.img,
-                location: '/home/0/product/${product.idProduct}',
+                location: '/home/0/product/${product.id}',
                 isFavorite: product.isFavorite!,
                 price: product.price,
               );

@@ -45,7 +45,7 @@ class ProductDatasourceImpl implements ProductDatasource {
       final product = _responseProduct(response);
       await supabase.from('products_company').insert([
         {
-          'id_product': product.first.idProduct,
+          'id_ext': product.first.id,
           'id_company': idCompany,
         }
       ]);
@@ -70,8 +70,9 @@ class ProductDatasourceImpl implements ProductDatasource {
         ..map(
           (event) => event.map(
             (e) {
-              final res = supabase.from(table).stream(
-                  primaryKey: ['idproduct']).eq('idproduct', e['id_product']);
+              final res = supabase
+                  .from(table)
+                  .stream(primaryKey: ['id_ext']).eq('id_ext', e['id_ext']);
               return res;
             },
           ),
@@ -85,7 +86,7 @@ class ProductDatasourceImpl implements ProductDatasource {
 
   @override
   Future<Product> updateProduct({
-    String idProduct = '',
+    int idProduct = 0,
     String nameProduct = '',
     String brand = '',
     String description = '',
@@ -112,7 +113,7 @@ class ProductDatasourceImpl implements ProductDatasource {
             'expire_product': expireProduct!.toIso8601String(),
             'idcategory': idCategory,
           })
-          .eq('idproduct', idProduct)
+          .eq('id_ext', idProduct)
           .select();
       final product = _responseProduct(response).first;
       return product;
@@ -123,7 +124,7 @@ class ProductDatasourceImpl implements ProductDatasource {
 
   @override
   Future<Product> updateProductCheck({
-    required String idProduct,
+    required int idProduct,
     required String nameProduct,
     required String brand,
     required String description,
@@ -163,10 +164,10 @@ class ProductDatasourceImpl implements ProductDatasource {
   }
 
   @override
-  Future<Product> getProductById({String idProduct = ''}) async {
+  Future<Product> getProductById({int idProduct = 0}) async {
     try {
       final response =
-          await supabase.from(table).select().eq('idproduct', idProduct);
+          await supabase.from(table).select().eq('id_ext', idProduct);
       final product = _responseProduct(response).first;
       return product;
     } on AuthException catch (e) {
@@ -217,12 +218,12 @@ class ProductDatasourceImpl implements ProductDatasource {
   }
 
   @override
-  Future<Product?> getProductWithDiscountById({String idproduct = ''}) async {
+  Future<Product?> getProductWithDiscountById({int idproduct = 0}) async {
     try {
       final response = await supabase
           .from('productdiscount')
           .select()
-          .eq('idproduct', idproduct);
+          .eq('id_ext', idproduct);
       if (response.isEmpty) {
         return null;
       }
@@ -269,26 +270,17 @@ class ProductDatasourceImpl implements ProductDatasource {
   @override
   Future<List<Product>> getProductsByInventory(int idInventory) async {
     try {
-      // final idCompany = await keyValueStorage.getValue<String>('id');
-
-      // final responseInventoryCompany = await supabase
-      //     .from('inventory_company')
-      //     .select('id')
-      //     .eq('id_company', idCompany!);
-      // print(responseInventoryCompany.first['id']);
-      print(idInventory);
       final responseInventoryProduct = await supabase
           .from('inventory_product')
-          .select('id_product')
+          .select('id_ext')
           .eq('id_inventory', idInventory);
-      print(responseInventoryProduct);
       final listIdsProduct =
-          responseInventoryProduct.map((e) => e['id_product']).toList();
+          responseInventoryProduct.map((e) => e['id_ext']).toList();
 
       final response = await supabase
           .from(table)
           .select()
-          .inFilter('idproduct', listIdsProduct)
+          .inFilter('id_ext', listIdsProduct)
           .order('create_at', ascending: false);
       final products = _responseProduct(response);
       return products;
@@ -302,13 +294,13 @@ class ProductDatasourceImpl implements ProductDatasource {
     try {
       final response = await supabase
           .from('products_company')
-          .select('id_product')
+          .select('id_ext')
           .eq('id_company', idCompany)
-        ..map((e) => e['id_product']).toList();
+        ..map((e) => e['id_ext']).toList();
       final responseProduct = await supabase
           .from(table)
           .select()
-          .inFilter('idproduct', response)
+          .inFilter('id_ext', response)
           .order('create_at', ascending: false);
       final products = _responseProduct(responseProduct);
       return products;

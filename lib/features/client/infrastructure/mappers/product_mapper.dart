@@ -4,6 +4,7 @@ import '../model/product_client_model.dart';
 class ProductClientMapper {
   static ProductClient toProductEntity(ProductClientModel product) =>
       ProductClient(
+        id: product.id,
         idProduct: product.idproduct,
         nameProduct: product.nameproduct,
         brand: product.brand,

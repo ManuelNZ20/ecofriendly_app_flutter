@@ -1,5 +1,5 @@
 class ProductModel {
-  final String idproduct;
+  final int idproduct;
   final String nameproduct;
   final String brand;
   final String description;
@@ -28,7 +28,7 @@ class ProductModel {
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) => ProductModel(
-        idproduct: json["idproduct"],
+        idproduct: json["id_ext"],
         nameproduct: json["nameproduct"],
         brand: json["brand"],
         description: json["description"],

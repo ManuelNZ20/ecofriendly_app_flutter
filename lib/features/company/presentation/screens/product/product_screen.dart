@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/utils/functions/show_snackbar.dart';
 import '../../../domain/domain.dart';
-import '../../../../../core/shared/infrastructure/infrastructure.dart';
 import '../../../../../core/shared/shared.dart';
 import '../../providers/forms/product_discount_form_provider.dart';
 import '../../providers/forms/product_form_provider.riverpod.dart';
@@ -16,7 +15,7 @@ class ProductCompanyScreen extends ConsumerWidget {
     super.key,
     required this.idProduct,
   });
-  final String idProduct;
+  final int idProduct;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final product = ref.watch(productProvider(idProduct));
@@ -116,11 +115,10 @@ class _ProductInformation extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final productForm = ref.watch(productFormProvider(product));
-    final productDiscount =
-        ref.watch(productDiscountProvider(product.idProduct));
+    final productDiscount = ref.watch(productDiscountProvider(product.id));
     final productDiscountForm = ref.watch(productDiscountFormProvider(
         productDiscount.productDiscount == null
-            ? newEmptyProductDiscount(product.idProduct)
+            ? newEmptyProductDiscount(product.id)
             : productDiscount.productDiscount!));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

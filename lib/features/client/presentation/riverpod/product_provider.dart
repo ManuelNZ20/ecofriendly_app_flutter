@@ -5,13 +5,13 @@ import 'products_provider.dart';
 import 'repository/repositories_provider.dart';
 
 final productDetailProvider =
-    FutureProvider.family<ProductClient, String>((ref, id) async {
+    FutureProvider.family<ProductClient, int>((ref, id) async {
   final product = ref.watch(productsProvider.notifier).getProduct(id: id);
   return product;
 });
 
 final productProvider =
-    StateNotifierProvider.family<ProductNotifier, ProductState, String>(
+    StateNotifierProvider.family<ProductNotifier, ProductState, int>(
         (ref, idProduct) {
   final productRepository = ref.watch(productRepositoryProvider);
   return ProductNotifier(
@@ -23,13 +23,14 @@ final productProvider =
 class ProductNotifier extends StateNotifier<ProductState> {
   final ProductClientRepository productRepository;
   ProductNotifier({
-    required String idProduct,
+    required int idProduct,
     required this.productRepository,
   }) : super(ProductState(id: idProduct)) {
     loadProduct();
   }
   ProductClient newEmptyProduct() {
     return ProductClient(
+      id: 0,
       idProduct: 'new',
       nameProduct: '',
       brand: '',
@@ -69,7 +70,7 @@ class ProductNotifier extends StateNotifier<ProductState> {
 }
 
 class ProductState {
-  final String id;
+  final int id;
   final ProductClient? product;
   final bool isLoading;
   final bool isSaving;
@@ -82,7 +83,7 @@ class ProductState {
   });
 
   ProductState copyWith({
-    String? id,
+    int? id,
     ProductClient? product,
     bool? isLoading,
     bool? isSaving,

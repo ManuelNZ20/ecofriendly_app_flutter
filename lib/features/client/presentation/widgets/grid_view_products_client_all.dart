@@ -45,7 +45,7 @@ class GridViewProductsClientAll extends ConsumerWidget {
                 onPressedFavorite: () {
                   ref
                       .read(productsProvider.notifier)
-                      .toggleFavorite(product.idProduct);
+                      .toggleFavorite(product.id);
                 },
                 isFavorite: product.isFavorite!,
                 isPromocion: isPromotion!,
@@ -64,7 +64,7 @@ class GridViewProductsClientAll extends ConsumerWidget {
                 onPressedFavorite: () {
                   ref
                       .read(productsProvider.notifier)
-                      .toggleFavorite(product.idProduct);
+                      .toggleFavorite(product.id);
                 },
                 isPromocion: isPromotion!,
               );

@@ -1,4 +1,5 @@
 class ProductClient {
+  final int id;
   final String idProduct;
   final String nameProduct;
   final String brand;
@@ -17,6 +18,7 @@ class ProductClient {
   final bool? isFavorite;
 
   ProductClient({
+    required this.id,
     required this.idProduct,
     required this.nameProduct,
     required this.brand,
@@ -36,6 +38,7 @@ class ProductClient {
   });
 
   ProductClient copyWith({
+    int? id,
     String? idProduct,
     String? nameProduct,
     String? brand,
@@ -53,6 +56,7 @@ class ProductClient {
     bool? isFavorite,
   }) =>
       ProductClient(
+        id: id ?? this.id,
         idProduct: idProduct ?? this.idProduct,
         nameProduct: nameProduct ?? this.nameProduct,
         brand: brand ?? this.brand,

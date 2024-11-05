@@ -36,7 +36,7 @@ class HorizontalProductsListView extends ConsumerWidget {
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   child: product.idproductdiscount.isNotEmpty
                       ? CardProduct(
-                          location: '/home/0/product/${product.idProduct}',
+                          location: '/home/0/product/${product.id}',
                           name: product.nameProduct,
                           brand: product.brand,
                           priceOriginal: product.price -
@@ -45,7 +45,7 @@ class HorizontalProductsListView extends ConsumerWidget {
                           onPressedFavorite: () {
                             ref
                                 .read(productsProvider.notifier)
-                                .toggleFavorite(product.idProduct);
+                                .toggleFavorite(product.id);
                           },
                           isFavorite: product.isFavorite!,
                           isPromocion: isPromotion,
@@ -53,7 +53,7 @@ class HorizontalProductsListView extends ConsumerWidget {
                           offPercentage: product.discountpercentage,
                         )
                       : CardProduct(
-                          location: '/home/0/product/${product.idProduct}',
+                          location: '/home/0/product/${product.id}',
                           name: product.nameProduct,
                           brand: product.brand,
                           priceOriginal: product.price,
@@ -62,7 +62,7 @@ class HorizontalProductsListView extends ConsumerWidget {
                           onPressedFavorite: () {
                             ref
                                 .read(productsProvider.notifier)
-                                .toggleFavorite(product.idProduct);
+                                .toggleFavorite(product.id);
                           },
                           isPromocion: isPromotion,
                         ),

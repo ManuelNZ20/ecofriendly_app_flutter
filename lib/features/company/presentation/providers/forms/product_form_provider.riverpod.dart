@@ -26,7 +26,7 @@ final productFormByInventoryProvider = StateNotifierProvider.family<
 
 class ProductFormNotifier extends StateNotifier<ProductFormState> {
   final Future<bool> Function(
-    String idProduct,
+    int idProduct,
     String nameProduct,
     String brand,
     String description,
@@ -45,7 +45,7 @@ class ProductFormNotifier extends StateNotifier<ProductFormState> {
     required Product product,
   }) : super(
           ProductFormState(
-            idProduct: product.idProduct,
+            idProduct: product.id,
             nameProduct: product.nameProduct,
             brand: product.brand,
             description: product.description,
@@ -142,7 +142,7 @@ class ProductFormNotifier extends StateNotifier<ProductFormState> {
     if (onSubmitCallback == null) return false;
     try {
       return await onSubmitCallback!(
-        state.idProduct ?? '',
+        state.idProduct ?? 0,
         state.nameProduct,
         state.brand,
         state.description,
@@ -163,7 +163,7 @@ class ProductFormNotifier extends StateNotifier<ProductFormState> {
 
 class ProductFormState {
   final bool isFormValid;
-  final String? idProduct;
+  final int? idProduct;
   final String nameProduct;
   final String brand;
   final String description;
@@ -178,7 +178,7 @@ class ProductFormState {
 
   ProductFormState({
     this.isFormValid = false,
-    this.idProduct = '',
+    this.idProduct = 0,
     this.nameProduct = '',
     this.brand = '',
     this.description = '',
@@ -194,7 +194,7 @@ class ProductFormState {
 
   ProductFormState copyWith({
     bool? isFormValid,
-    String? idProduct,
+    int? idProduct,
     String? nameProduct,
     String? brand,
     String? description,

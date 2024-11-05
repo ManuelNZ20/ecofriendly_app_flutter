@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../company/domain/domain.dart';
+import 'package:ecofriendly_app/features/client/domain/entities/entities.dart';
 
 class ProductItemSearch extends StatelessWidget {
   const ProductItemSearch({
@@ -7,7 +7,7 @@ class ProductItemSearch extends StatelessWidget {
     required this.product,
     required this.onProductSelected,
   });
-  final Product product;
+  final ProductClient product;
   final Function onProductSelected;
 
   @override

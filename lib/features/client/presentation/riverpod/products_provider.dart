@@ -53,9 +53,9 @@ class ProductsNotifier extends StateNotifier<ProductsState> {
         .toList();
   }
 
-  ProductClient getProduct({String id = ''}) {
+  ProductClient getProduct({int id = 0}) {
     // buscar productps de la lista de productos
-    return state.products.firstWhere((element) => element.idProduct == id);
+    return state.products.firstWhere((element) => element.id == id);
   }
 
   List<ProductClient> getProductsByIdCategory({int idCategory = 0}) {
@@ -88,10 +88,10 @@ class ProductsNotifier extends StateNotifier<ProductsState> {
     }
   }
 
-  void toggleFavorite(String id) {
+  void toggleFavorite(int id) {
     state = state.copyWith(
         products: state.products.map((e) {
-      if (e.idProduct == id) {
+      if (e.id == id) {
         return e.copyWith(
           isFavorite: !e.isFavorite!,
         );

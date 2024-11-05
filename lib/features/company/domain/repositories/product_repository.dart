@@ -17,7 +17,7 @@ abstract class ProductRepository {
 
   Stream<List<Product>> getProductsStream();
   Future<Product> updateProduct({
-    String idProduct,
+    int idProduct,
     String nameProduct,
     String brand,
     String description,
@@ -31,7 +31,7 @@ abstract class ProductRepository {
   });
 
   Future<Product> updateProductCheck({
-    required String idProduct,
+    required int idProduct,
     required String nameProduct,
     required String brand,
     required String description,
@@ -45,9 +45,9 @@ abstract class ProductRepository {
     required bool changedImage,
   });
 
-  Future<Product> getProductById({String idProduct = ''});
+  Future<Product> getProductById({int idProduct = 0});
 
-  Future<Product?> getProductWithDiscountById({String idproduct = ''});
+  Future<Product?> getProductWithDiscountById({int idproduct = 0});
 
   Future<List<Product>> getProducts();
 

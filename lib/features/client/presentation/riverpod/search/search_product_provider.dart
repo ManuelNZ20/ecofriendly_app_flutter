@@ -1,11 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../company/domain/domain.dart';
-import '../../../../company/presentation/providers/repository/product_repository_provider.riverpod.dart';
+import '../../../domain/entities/entities.dart';
+import '../repository/repositories_provider.dart';
 
 final searchQueryProvider = StateProvider<String>((ref) => '');
 
 final searchProductsProvider =
-    StateNotifierProvider<SearchProductNotifier, List<Product>>((ref) {
+    StateNotifierProvider<SearchProductNotifier, List<ProductClient>>((ref) {
   final productRepository = ref.read(productRepositoryProvider);
   return SearchProductNotifier(
     searchProduct: productRepository.searchProducts,
@@ -13,9 +13,10 @@ final searchProductsProvider =
   );
 });
 
-typedef SearchProductCallback = Future<List<Product>> Function(String query);
+typedef SearchProductCallback = Future<List<ProductClient>> Function(
+    String query);
 
-class SearchProductNotifier extends StateNotifier<List<Product>> {
+class SearchProductNotifier extends StateNotifier<List<ProductClient>> {
   final SearchProductCallback searchProduct;
   final Ref ref;
   SearchProductNotifier({
@@ -23,8 +24,8 @@ class SearchProductNotifier extends StateNotifier<List<Product>> {
     required this.ref,
   }) : super([]);
 
-  Future<List<Product>> searchProductByQuery(String query) async {
-    final List<Product> products = await searchProduct(query);
+  Future<List<ProductClient>> searchProductByQuery(String query) async {
+    final List<ProductClient> products = await searchProduct(query);
     ref.read(searchQueryProvider.notifier).update((state) => query);
     state = products;
     return products;

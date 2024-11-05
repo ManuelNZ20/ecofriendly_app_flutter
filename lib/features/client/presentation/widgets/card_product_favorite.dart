@@ -15,7 +15,7 @@ class CardProductFavorite extends ConsumerWidget {
     required this.isFavorite,
     required this.price,
   });
-  final String id;
+  final int id;
   final String name;
   final String img;
   final String location;

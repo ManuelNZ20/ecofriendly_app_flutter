@@ -5,7 +5,7 @@ import '../../../../../core/shared/shared.dart';
 import '../../riverpod/products_provider.dart';
 
 class ProductDetailScreen extends ConsumerWidget {
-  final String productId;
+  final int productId;
   const ProductDetailScreen({
     super.key,
     required this.productId,
@@ -37,7 +37,7 @@ class ProductDetailScreen extends ConsumerWidget {
           IconButton(
             icon: Icon(
               ref.watch(productsProvider.select((state) => state.products
-                      .firstWhere((product) => product.idProduct == productId)
+                      .firstWhere((product) => product.id == productId)
                       .isFavorite!))
                   ? Icons.favorite
                   : Icons.favorite_border,

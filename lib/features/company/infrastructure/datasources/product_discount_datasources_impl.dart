@@ -1,6 +1,4 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-import '../../domain/datasources/product_discount_datasource.dart';
 import '../../domain/domain.dart';
 import '../mapper/product_discount_mapper.dart';
 import '../models/product_discount.module.dart';
@@ -30,13 +28,13 @@ class ProductDiscountDataSourceImpl extends ProductDiscountDatasource {
 
   @override
   Future<ProductDiscount> createProductDiscount({
-    String idproduct = '',
+    int idproduct = 0,
     double discountPercentage = 0.0,
   }) async {
     try {
       final response = await supabaseClient.from(nameTable).insert([
         {
-          'idproduct': idproduct,
+          'id_ext': idproduct,
           'discount_percentage': discountPercentage,
         }
       ]).select('''
@@ -51,13 +49,12 @@ class ProductDiscountDataSourceImpl extends ProductDiscountDatasource {
   }
 
   @override
-  Future<ProductDiscount?> getProductDiscountById(
-      {String idproduct = ''}) async {
+  Future<ProductDiscount?> getProductDiscountById({int idproduct = 0}) async {
     try {
       final response = await supabaseClient.from(nameTable).select('''
               *,
               product(*)
-            ''').eq('idproduct', idproduct);
+            ''').eq('id_ext', idproduct);
       final productDiscount = _responseProductDiscount(response).first;
       return productDiscount;
     } on AuthException catch (e) {
@@ -73,7 +70,7 @@ class ProductDiscountDataSourceImpl extends ProductDiscountDatasource {
   @override
   Future<ProductDiscount> updateProductDiscount({
     String idproductdiscount = '',
-    String idproduct = '',
+    int idproduct = 0,
     double discountPercentage = 0.0,
   }) async {
     try {

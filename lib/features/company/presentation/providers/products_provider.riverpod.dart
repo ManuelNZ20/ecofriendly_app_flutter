@@ -34,7 +34,7 @@ final productsByCompanyProvider = FutureProvider<List<Product>>((ref) async {
   final responseProduct = supabase
       .from('product')
       .select()
-      .inFilter('idproduct', productIds)
+      .inFilter('id_ext', productIds)
       .order('create_at', ascending: false)
       .then((value) {
     final products = value.map(
@@ -53,17 +53,17 @@ Future<String?> _getCompanyId() async {
 }
 
 // Función para obtener la lista de IDs de productos asociados a la compañía
-Future<List<String>> _getProductIdsByCompany(
+Future<List<int>> _getProductIdsByCompany(
     SupabaseClient supabase, String idCompany) async {
   final response = await supabase
       .from('products_company')
-      .select('id_product')
+      .select('id_ext')
       .eq('id_company', idCompany);
 
   if (response.isEmpty) {
     return [];
   }
-  return response.map<String>((e) => e['id_product']).toList();
+  return response.map<int>((e) => e['id_ext']).toList();
 }
 
 class ProductsNotifier extends StateNotifier<ProductsState> {
@@ -95,7 +95,7 @@ class ProductsNotifier extends StateNotifier<ProductsState> {
     return products;
   }
 
-  Future<bool> existingProductWithDiscount(String idproduct) async {
+  Future<bool> existingProductWithDiscount(int idproduct) async {
     try {
       final product = await productRepository.getProductWithDiscountById(
           idproduct: idproduct);
@@ -130,7 +130,7 @@ class ProductsNotifier extends StateNotifier<ProductsState> {
   }
 
   Future<bool> createdOrUpdatedProduct(
-    String idProduct,
+    int idProduct,
     String nameProduct,
     String brand,
     String description,
@@ -144,7 +144,7 @@ class ProductsNotifier extends StateNotifier<ProductsState> {
     int idCategory,
   ) async {
     try {
-      if (idProduct == 'new') {
+      if (idProduct == 0) {
         final imgPath =
             await CloudinaryInit.uploadImage(img, UploadPreset.product);
         final product = await productRepository.createProduct(
@@ -163,8 +163,8 @@ class ProductsNotifier extends StateNotifier<ProductsState> {
         );
         return true;
       }
-      final existingProduct = state.products
-          .firstWhere((element) => element.idProduct == idProduct);
+      final existingProduct =
+          state.products.firstWhere((element) => element.id == idProduct);
       final bool hasImageChange = existingProduct.img != img;
       String updatedImgPath = img;
 
@@ -190,7 +190,7 @@ class ProductsNotifier extends StateNotifier<ProductsState> {
 
       state = state.copyWith(
         products: state.products
-            .map((e) => (e.idProduct == idProduct) ? product : e)
+            .map((e) => (e.id == idProduct) ? product : e)
             .toList(),
       );
       return true;

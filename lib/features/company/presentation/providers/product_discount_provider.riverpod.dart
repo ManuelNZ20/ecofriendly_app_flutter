@@ -3,7 +3,7 @@ import '../../domain/domain.dart';
 import 'repository/product_discount_repository_provider.riverpod.dart';
 
 final productDiscountProvider = StateNotifierProvider.family<
-    ProductDiscountNotifier, ProductDiscountState, String>(
+    ProductDiscountNotifier, ProductDiscountState, int>(
   (ref, idproductdiscount) {
     final productDiscountRepository =
         ref.watch(productDiscountRepositoryProvider);
@@ -19,20 +19,20 @@ class ProductDiscountNotifier extends StateNotifier<ProductDiscountState> {
   final ProductDiscountRepository productDiscountRepository;
 
   ProductDiscountNotifier({
-    required String idproductdiscount,
+    required int idproductdiscount,
     required this.productDiscountRepository,
   }) : super(ProductDiscountState(id: idproductdiscount)) {
     loadProductDiscount();
   }
 
-  ProductDiscount newEmptyProductDiscount(String idproduct) {
+  ProductDiscount newEmptyProductDiscount(int idproduct) {
     return ProductDiscount(
       idproductdiscount: 'new',
       idproduct: idproduct,
       discountpercentage: 0,
       createdAt: DateTime.now(),
       product: Product(
-        idProduct: 'new',
+        id: 0,
         nameProduct: '',
         brand: '',
         description: '',
@@ -51,7 +51,7 @@ class ProductDiscountNotifier extends StateNotifier<ProductDiscountState> {
   Future<void> loadProductDiscount() async {
     try {
       print('State ${state.id}');
-      if (state.id == 'new') {
+      if (state.id == 0) {
         state = state.copyWith(
           isLoading: false,
           productDiscount: newEmptyProductDiscount(state.id),
@@ -81,7 +81,7 @@ class ProductDiscountNotifier extends StateNotifier<ProductDiscountState> {
 }
 
 class ProductDiscountState {
-  final String id;
+  final int id;
   final ProductDiscount? productDiscount;
   final bool isLoading;
   final bool isSaving;
@@ -94,7 +94,7 @@ class ProductDiscountState {
   });
 
   ProductDiscountState copyWith({
-    String? id,
+    int? id,
     ProductDiscount? productDiscount,
     bool? isLoading,
     bool? isSaving,

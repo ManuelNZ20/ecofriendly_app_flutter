@@ -22,7 +22,7 @@ class ProductClientRepositoryImpl implements ProductClientRepository {
   }
 
   @override
-  Future<ProductClient> getProductById({String idProduct = ''}) async {
+  Future<ProductClient> getProductById({int idProduct = 0}) async {
     final product =
         await productDataSource.getProductById(idProduct: idProduct);
     return product;
@@ -39,8 +39,7 @@ class ProductClientRepositoryImpl implements ProductClientRepository {
   }
 
   @override
-  Future<ProductClient?> getProductWithDiscountById(
-      {String idproduct = ''}) async {
+  Future<ProductClient?> getProductWithDiscountById({int idproduct = 0}) async {
     try {
       final product = await productDataSource.getProductWithDiscountById(
           idproduct: idproduct);
